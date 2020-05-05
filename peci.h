@@ -17,11 +17,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcpp"
-#pragma GCC diagnostic ignored "-Wvariadic-macros"
-#include <linux/peci-ioctl.h>
-#pragma GCC diagnostic pop
 #include <inttypes.h>
 #include <stdbool.h>
 
@@ -29,6 +24,10 @@ extern "C" {
 #define MIN_CLIENT_ADDR 0x30
 #define MAX_CLIENT_ADDR 0x37
 #define MAX_CPUS (MAX_CLIENT_ADDR - MIN_CLIENT_ADDR + 1)
+
+// PECI completion codes from peci-ioctl.h
+#define PECI_DEV_CC_SUCCESS 0x40
+#define PECI_DEV_CC_FATAL_MCA_DETECTED 0x94
 
 typedef enum
 {

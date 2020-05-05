@@ -21,6 +21,11 @@
 #include <syslog.h>
 #include <time.h>
 #include <unistd.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
+#pragma GCC diagnostic ignored "-Wvariadic-macros"
+#include <linux/peci-ioctl.h>
+#pragma GCC diagnostic pop
 
 EPECIStatus peci_GetDIB_seq(uint8_t target, uint64_t* dib, int peci_fd);
 
