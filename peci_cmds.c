@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
         switch (argc - optind)
         {
             case 3:
-                u32PkgValue = strtoul(argv[--index], NULL, 0);
+                u32PkgValue = (uint32_t)strtoul(argv[--index], NULL, 0);
                 u16PkgParam = (uint16_t)strtoul(argv[--index], NULL, 0);
                 u8PkgIndex = (uint8_t)strtoul(argv[--index], NULL, 0);
                 break;
@@ -295,7 +295,8 @@ int main(int argc, char* argv[])
             printf("   cc:0x%02x\n", cc);
             return 1;
         }
-        printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2, u64MsrVal);
+        printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2,
+               (unsigned long long)u64MsrVal);
     }
     else if (strcmp(cmd, "rdpciconfig") == 0)
     {
@@ -375,7 +376,7 @@ int main(int argc, char* argv[])
     else if (strcmp(cmd, "wrpciconfiglocal") == 0)
     {
         index = argc;
-        u32PciWriteVal = strtoul(argv[--index], NULL, 0);
+        u32PciWriteVal = (uint32_t)strtoul(argv[--index], NULL, 0);
         switch (argc - optind)
         {
             case 5:
@@ -452,7 +453,7 @@ int main(int argc, char* argv[])
         switch (argc - optind)
         {
             case 6:
-                u32PciWriteVal = strtoul(argv[--index], NULL, 0);
+                u32PciWriteVal = (uint32_t)strtoul(argv[--index], NULL, 0);
                 u16PciReg = (uint16_t)strtoul(argv[--index], NULL, 0);
                 u8PciFunc = (uint8_t)strtoul(argv[--index], NULL, 0);
                 u8PciDev = (uint8_t)strtoul(argv[--index], NULL, 0);
@@ -522,7 +523,7 @@ int main(int argc, char* argv[])
         switch (argc - optind)
         {
             case 6:
-                u32PciWriteVal = strtoul(argv[--index], NULL, 0);
+                u32PciWriteVal = (uint32_t)strtoul(argv[--index], NULL, 0);
                 u16PciReg = (uint16_t)strtoul(argv[--index], NULL, 0);
                 u8PciFunc = (uint8_t)strtoul(argv[--index], NULL, 0);
                 u8PciDev = (uint8_t)strtoul(argv[--index], NULL, 0);
@@ -558,7 +559,7 @@ int main(int argc, char* argv[])
         switch (argc - optind)
         {
             case 7:
-                u64Offset = strtoull(argv[--index], NULL, 0);
+                u64Offset = (uint64_t)strtoull(argv[--index], NULL, 0);
                 u8PciFunc = (uint8_t)strtoul(argv[--index], NULL, 0);
                 u8PciDev = (uint8_t)strtoul(argv[--index], NULL, 0);
                 u8PciBus = (uint8_t)strtoul(argv[--index], NULL, 0);
@@ -595,8 +596,8 @@ int main(int argc, char* argv[])
         switch (argc - optind)
         {
             case 8:
-                u64MmioWriteVal = strtoull(argv[--index], NULL, 0);
-                u64Offset = strtoull(argv[--index], NULL, 0);
+                u64MmioWriteVal = (uint64_t)strtoull(argv[--index], NULL, 0);
+                u64Offset = (uint64_t)strtoull(argv[--index], NULL, 0);
                 u8PciFunc = (uint8_t)strtoul(argv[--index], NULL, 0);
                 u8PciDev = (uint8_t)strtoul(argv[--index], NULL, 0);
                 u8PciBus = (uint8_t)strtoul(argv[--index], NULL, 0);
