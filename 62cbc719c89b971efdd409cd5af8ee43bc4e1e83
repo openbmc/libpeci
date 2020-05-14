@@ -1,0 +1,8 @@
+Ok-To-Test+1: Jenkins <openbmc-ci-admin@ozlabs.org>
+Verified+1: Jenkins <openbmc-ci-admin@ozlabs.org>
+Code-Review+2: Jason Bills <jason.m.bills@linux.intel.com>
+Submitted-by: Jason Bills <jason.m.bills@linux.intel.com>
+Submitted-at: Thu, 14 May 2020 17:45:16 +0000
+Reviewed-on: https://gerrit.openbmc-project.xyz/c/openbmc/libpeci/+/32044
+Project: openbmc/libpeci
+Branch: refs/heads/master
