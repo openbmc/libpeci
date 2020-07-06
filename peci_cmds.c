@@ -644,8 +644,8 @@ int main(int argc, char* argv[])
         // Read length is provided in the third byte of the PECI command
         uint8_t readLength = (uint8_t)strtoul(argv[optind++], NULL, 0);
 
-        // remaining parameters should match write length
-        if ((argc - optind) != writeLength)
+        // remaining parameters should fit within write length
+        if ((argc - optind) > writeLength)
         {
             printf("ERROR: Incorrect write length for raw command\n");
             goto ErrorExit;
@@ -657,7 +657,7 @@ int main(int argc, char* argv[])
             printf("Raw command memory allocation failed\n");
             return 1;
         }
-        for (i = 0; i < writeLength; i++)
+        for (i = 0; i < (argc - optind); i++)
         {
             rawCmd[i] = (uint8_t)strtoul(argv[i + optind], NULL, 0);
         }
