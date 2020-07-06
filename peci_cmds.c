@@ -682,6 +682,15 @@ int main(int argc, char* argv[])
         }
         ret = peci_raw(rawAddr, readLength, rawCmd, writeLength, rawResp,
                        readLength);
+        if (verbose)
+        {
+            printf("Raw response: ");
+            for (i = 0; i < readLength; i++)
+            {
+                printf("0x%02x ", rawResp[i]);
+            }
+            printf("\n");
+        }
         if (0 != ret)
         {
             printf("ERROR %d: command failed\n", ret);
