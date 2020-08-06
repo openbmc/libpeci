@@ -205,6 +205,12 @@ EPECIStatus peci_Ping(uint8_t target)
     int peci_fd = -1;
     EPECIStatus ret;
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -224,6 +230,12 @@ EPECIStatus peci_Ping_seq(uint8_t target, int peci_fd)
     EPECIStatus ret;
     struct peci_ping_msg cmd;
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     cmd.addr = target;
     ret = HW_peci_issue_cmd(PECI_IOC_PING, (char*)&cmd, peci_fd);
 
@@ -239,6 +251,12 @@ EPECIStatus peci_GetDIB(uint8_t target, uint64_t* dib)
     EPECIStatus ret;
 
     if (dib == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -268,6 +286,12 @@ EPECIStatus peci_GetDIB_seq(uint8_t target, uint64_t* dib, int peci_fd)
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     ret = HW_peci_issue_cmd(PECI_IOC_GET_DIB, (char*)&cmd, peci_fd);
 
     if (ret == PECI_CC_SUCCESS)
@@ -288,6 +312,12 @@ EPECIStatus peci_GetTemp(uint8_t target, int16_t* temperature)
     struct peci_get_temp_msg cmd;
 
     if (temperature == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -328,6 +358,12 @@ EPECIStatus peci_RdPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Value,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -351,6 +387,12 @@ EPECIStatus peci_RdPkgConfig_seq(uint8_t target, uint8_t u8Index,
     EPECIStatus ret;
 
     if (pPkgConfig == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -397,6 +439,12 @@ EPECIStatus peci_WrPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Param,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -420,6 +468,12 @@ EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
     EPECIStatus ret;
 
     if (cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -454,6 +508,12 @@ EPECIStatus peci_RdIAMSR(uint8_t target, uint8_t threadID, uint16_t MSRAddress,
     EPECIStatus ret;
 
     if (u64MsrVal == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -494,6 +554,12 @@ EPECIStatus peci_RdPCIConfig(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -518,6 +584,12 @@ EPECIStatus peci_RdPCIConfig_seq(uint8_t target, uint8_t u8Bus,
     EPECIStatus ret;
 
     if (pPCIData == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -561,6 +633,12 @@ EPECIStatus peci_RdPCIConfigLocal(uint8_t target, uint8_t u8Bus,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -586,6 +664,12 @@ EPECIStatus peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus,
     EPECIStatus ret;
 
     if (pPCIReg == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -637,6 +721,12 @@ EPECIStatus peci_WrPCIConfigLocal(uint8_t target, uint8_t u8Bus,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -676,6 +766,12 @@ static EPECIStatus peci_RdEndPointConfigPciCommon(
     EPECIStatus ret;
 
     if (pPCIData == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -728,6 +824,12 @@ EPECIStatus peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -750,6 +852,12 @@ EPECIStatus peci_RdEndPointConfigPci_seq(uint8_t target, uint8_t u8Seg,
                                          int peci_fd, uint8_t* cc)
 {
     if (pPCIData == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -783,6 +891,12 @@ EPECIStatus peci_RdEndPointConfigPciLocal(uint8_t target, uint8_t u8Seg,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -806,6 +920,12 @@ EPECIStatus peci_RdEndPointConfigPciLocal_seq(uint8_t target, uint8_t u8Seg,
                                               uint8_t* cc)
 {
     if (pPCIData == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -840,6 +960,12 @@ EPECIStatus peci_RdEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -864,6 +990,12 @@ EPECIStatus peci_RdEndPointConfigMmio_seq(
     EPECIStatus ret;
 
     if (pMmioData == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -921,6 +1053,12 @@ EPECIStatus peci_WrEndPointConfig_seq(uint8_t target, uint8_t u8MsgType,
     EPECIStatus ret;
 
     if (cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -1013,6 +1151,12 @@ EPECIStatus peci_WrEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -1037,6 +1181,12 @@ EPECIStatus peci_WrEndPointConfigMmio_seq(
     EPECIStatus ret;
 
     if (cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -1078,6 +1228,12 @@ EPECIStatus peci_CrashDump_Discovery(uint8_t target, uint8_t subopcode,
     EPECIStatus ret;
 
     if (pData == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -1138,6 +1294,12 @@ EPECIStatus peci_CrashDump_GetFrame(uint8_t target, uint16_t param0,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     // Per the PECI spec, the read length must be a qword or dqword
     if (u8ReadLen != 8 && u8ReadLen != 16)
     {
@@ -1194,6 +1356,12 @@ EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -1238,6 +1406,12 @@ EPECIStatus peci_GetCPUID(const uint8_t clientAddr, CPUModel* cpuModel,
     uint32_t cpuid = 0;
 
     if (cpuModel == NULL || stepping == NULL || cc == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The client address must be in the valid range
+    if (clientAddr < MIN_CLIENT_ADDR || clientAddr > MAX_CLIENT_ADDR)
     {
         return PECI_CC_INVALID_REQ;
     }
