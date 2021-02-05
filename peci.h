@@ -254,6 +254,7 @@ EPECIStatus peci_Ping(uint8_t target);
 EPECIStatus peci_Ping_seq(uint8_t target, int peci_fd);
 EPECIStatus peci_GetCPUID(const uint8_t clientAddr, CPUModel* cpuModel,
                           uint8_t* stepping, uint8_t* cc);
+void peci_SetDevName(char* peci_dev);
 
 #ifdef __cplusplus
 }

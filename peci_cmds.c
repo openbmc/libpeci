@@ -50,6 +50,8 @@ void Usage(char* progname)
     printf("\t%-12s%s\n", "-s <size>",
            "Size of data to read or write in bytes. Accepted values are 1, 2, "
            "4, 8, and 16. Default is 4");
+    printf("\t%-12s%s\n", "-d",
+           "Set PECI device name, for example \"-d /dev/peci-0\"");
     printf("Commands:\n");
     printf("\t%-28s%s\n", "Ping", "Ping the target");
     printf("\t%-28s%s\n", "GetTemp", "Get the temperature");
@@ -129,7 +131,7 @@ int main(int argc, char* argv[])
     //
     // Parse arguments.
     //
-    while (-1 != (c = getopt(argc, argv, "hvl:a:s:")))
+    while (-1 != (c = getopt(argc, argv, "hvl:a:s:d:")))
     {
         switch (c)
         {
@@ -176,6 +178,10 @@ int main(int argc, char* argv[])
                     printf("ERROR: Invalid size \"%d\"\n", u8Size);
                     goto ErrorExit;
                 }
+                break;
+
+            case 'd':
+                peci_SetDevName(optarg);
                 break;
 
             default:
