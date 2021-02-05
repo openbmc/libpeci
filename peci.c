@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <peci.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <syslog.h>
@@ -29,6 +30,47 @@
 
 EPECIStatus peci_GetDIB_seq(uint8_t target, uint64_t* dib, int peci_fd);
 
+char *peci_device_list[2];
+#define DEV_NAME_SIZE 64
+/*-------------------------------------------------------------------------
+ * This funcion sets the name of the PECI device file to use.
+ * If the PECI device name is null try "/dev/peci-default",
+ * if "/dev/peci-default" does not exist, fall back to "/dev/peci-0"
+ *------------------------------------------------------------------------*/
+void peci_SetDevName(char *peci_dev)
+{
+    static char peci_name_new[DEV_NAME_SIZE] = {};
+
+    if (peci_dev)
+    {
+        strncpy(peci_name_new, peci_dev, sizeof(peci_name_new));
+        peci_name_new[DEV_NAME_SIZE - 1]= '\0';
+        peci_device_list[0] = peci_name_new;
+        peci_device_list[1] = NULL;
+        syslog(LOG_INFO, "PECI set dev name to %s\n", peci_device_list[0]);
+    }
+    else
+    {
+        peci_device_list[0] = "/dev/peci-default";
+        peci_device_list[1] = "/dev/peci-0";
+        syslog(LOG_INFO, "PECI set dev names to %s, %s\n",
+                peci_device_list[0], peci_device_list[1]);
+    }
+}
+
+/*-------------------------------------------------------------------------
+ * This function initializes PECI device name when a shared library
+ * is loaded, typically during program startup.
+ *------------------------------------------------------------------------*/
+static void init() __attribute__((constructor));
+static void init()
+{
+    // By default PECI_DEV is not defined in the environment,
+    // so this will call peci_SetDevName(NULL) and initialize
+    // PECI device name to defaults.
+    peci_SetDevName(getenv("PECI_DEV"));
+}
+
 /*-------------------------------------------------------------------------
  * This function unlocks the peci interface
  *------------------------------------------------------------------------*/
@@ -40,7 +82,6 @@ void peci_Unlock(int peci_fd)
     }
 }
 
-#define PECI_DEVICE "/dev/peci-0"
 /*-------------------------------------------------------------------------
  * This function attempts to lock the peci interface with the specified
  * timeout and returns a file descriptor if successful.
@@ -51,6 +92,7 @@ EPECIStatus peci_Lock(int* peci_fd, int timeout_ms)
     sRequest.tv_sec = 0;
     sRequest.tv_nsec = PECI_TIMEOUT_RESOLUTION_MS * 1000 * 1000;
     int timeout_count = 0;
+    char* peci_device = peci_device_list[0];
 
     if (NULL == peci_fd)
     {
@@ -58,7 +100,12 @@ EPECIStatus peci_Lock(int* peci_fd, int timeout_ms)
     }
 
     // Open the PECI driver with the specified timeout
-    *peci_fd = open(PECI_DEVICE, O_RDWR | O_CLOEXEC);
+    *peci_fd = open(peci_device, O_RDWR | O_CLOEXEC);
+    if (*peci_fd == -1 && errno == ENOENT && peci_device_list[1])
+    {
+        peci_device = peci_device_list[1];
+        *peci_fd = open(peci_device, O_RDWR | O_CLOEXEC);
+    }
     switch (timeout_ms)
     {
         case PECI_NO_WAIT:
@@ -67,14 +114,14 @@ EPECIStatus peci_Lock(int* peci_fd, int timeout_ms)
             while (-1 == *peci_fd)
             {
                 nanosleep(&sRequest, NULL);
-                *peci_fd = open(PECI_DEVICE, O_RDWR | O_CLOEXEC);
+                *peci_fd = open(peci_device, O_RDWR | O_CLOEXEC);
             }
         default:
             while (-1 == *peci_fd && timeout_count < timeout_ms)
             {
                 nanosleep(&sRequest, NULL);
                 timeout_count += PECI_TIMEOUT_RESOLUTION_MS;
-                *peci_fd = open(PECI_DEVICE, O_RDWR | O_CLOEXEC);
+                *peci_fd = open(peci_device, O_RDWR | O_CLOEXEC);
             }
     }
     if (-1 == *peci_fd)
