@@ -24,20 +24,27 @@
 #define ABS(_v_) (((_v_) > 0) ? (_v_) : -(_v_))
 #endif
 
+#define CC_MAX 64
+
 extern EPECIStatus peci_GetDIB(uint8_t target, uint64_t* dib);
 
 void Usage(char* progname)
 {
     printf("Usage:\n");
-    printf("%s [-a <addr>] [-s <size>] <command> [parameters]\n", progname);
+    printf("%s [-h] [-v] [-a <addr>] [-s <size>] [-l <count>] <command> "
+           "[parameters]\n",
+           progname);
     printf("Options:\n");
-    printf("\t%-6s%s\n", "-h", "Display this help information");
-    printf("\t%-6s%s\n", "-v",
+    printf("\t%-12s%s\n", "-h", "Display this help information");
+    printf("\t%-12s%s\n", "-v",
            "Display additional information about the command");
-    printf("\t%-6s%s\n", "-a",
+    printf("\t%-12s%s\n", "-l <count>",
+           "Loop the command the given number of times. <count> is in the "
+           "range 1 to 4294967295");
+    printf("\t%-12s%s\n", "-a <addr>",
            "Address of the target. Accepted values are 48-55 (0x30-0x37). "
            "Default is 48 (0x30)");
-    printf("\t%-6s%s\n", "-s",
+    printf("\t%-12s%s\n", "-s <size>",
            "Size of data to read or write in bytes. Accepted values are 1, 2, "
            "4, 8, and 16. Default is 4");
     printf("Commands:\n");
@@ -70,6 +77,41 @@ void Usage(char* progname)
     printf("\n");
 }
 
+static void incrementCCCounts(uint8_t cc, uint8_t* ccs, uint32_t* ccCounts,
+                              uint8_t* ccIndex)
+{
+    for (uint8_t i = 0; i <= *ccIndex; i++)
+    {
+        // If this is a new cc, add it to the list
+        if (i == *ccIndex)
+        {
+            if (*ccIndex >= CC_MAX)
+            {
+                printf("Error: More return codes than expected, 0x%x not "
+                       "counted\n",
+                       cc);
+                break;
+            }
+            ccs[(*ccIndex)++] = cc;
+        }
+        // Increment the count on this cc
+        if (ccs[i] == cc)
+        {
+            ccCounts[i]++;
+            break;
+        }
+    }
+}
+
+static void printLoopSummary(uint8_t* ccs, uint32_t* ccCounts, uint8_t ccIndex)
+{
+    printf("Completion code counts:\n");
+    for (uint8_t i = 0; i < ccIndex; i++)
+    {
+        printf("   0x%02x: %d\n", ccs[i], ccCounts[i]);
+    }
+}
+
 int main(int argc, char* argv[])
 {
     int c;
@@ -100,11 +142,16 @@ int main(int argc, char* argv[])
     int index = 0;
     uint8_t cc = 0;
     bool verbose = false;
+    bool looped = false;
+    uint32_t loops = 1;
+    uint8_t ccs[CC_MAX] = {};
+    uint32_t ccCounts[CC_MAX] = {};
+    uint8_t ccIndex = 0;
 
     //
     // Parse arguments.
     //
-    while (-1 != (c = getopt(argc, argv, "hva:s:")))
+    while (-1 != (c = getopt(argc, argv, "hvl:a:s:")))
     {
         switch (c)
         {
@@ -115,6 +162,17 @@ int main(int argc, char* argv[])
 
             case 'v':
                 verbose = true;
+                break;
+
+            case 'l':
+                looped = true;
+                if (optarg != NULL)
+                    loops = (uint32_t)strtoul(optarg, NULL, 0);
+                if (!loops)
+                {
+                    printf("ERROR: Invalid loop count \"%d\"\n", loops);
+                    goto ErrorExit;
+                }
                 break;
 
             case 'a':
@@ -174,7 +232,21 @@ int main(int argc, char* argv[])
         {
             printf("Pinging ... ");
         }
-        (0 == peci_Ping(address)) ? printf("Succeeded\n") : printf("Failed\n");
+        while (loops--)
+        {
+            ret = peci_Ping(address);
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("Failed\n");
+                }
+                else
+                {
+                    printf("Succeeded\n");
+                }
+            }
+        }
     }
     else if (strcmp(cmd, "getdib") == 0)
     {
@@ -182,13 +254,21 @@ int main(int argc, char* argv[])
         {
             printf("GetDIB\n");
         }
-        ret = peci_GetDIB(address, &dib);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: Retrieving DIB failed\n", ret);
-            return 1;
+            ret = peci_GetDIB(address, &dib);
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: Retrieving DIB failed\n", ret);
+                }
+                else
+                {
+                    printf("   0x%" PRIx64 "\n", dib);
+                }
+            }
         }
-        printf("   0x%" PRIx64 "\n", dib);
     }
 
     else if (strcmp(cmd, "gettemp") == 0)
@@ -197,17 +277,26 @@ int main(int argc, char* argv[])
         {
             printf("GetTemp\n");
         }
-        ret = peci_GetTemp(address, &temperature);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: Retrieving temperature failed\n", ret);
-            return 1;
+            ret = peci_GetTemp(address, &temperature);
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: Retrieving temperature failed\n", ret);
+                }
+                else
+                {
+                    printf("   %04xh (%c%d.%02dC)\n",
+                           (int)(unsigned int)(unsigned short)temperature,
+                           (0 > temperature) ? '-' : '+',
+                           (int)((unsigned int)ABS(temperature) / 64),
+                           (int)(((unsigned int)ABS(temperature) % 64) * 100) /
+                               64);
+                }
+            }
         }
-        printf("   %04xh (%c%d.%02dC)\n",
-               (int)(unsigned int)(unsigned short)temperature,
-               (0 > temperature) ? '-' : '+',
-               (int)((unsigned int)ABS(temperature) / 64),
-               (int)(((unsigned int)ABS(temperature) % 64) * 100) / 64);
     }
 
     else if (strcmp(cmd, "rdpkgconfig") == 0)
@@ -229,15 +318,30 @@ int main(int argc, char* argv[])
             printf("Pkg Read of Index %02x Param %04x\n", u8PkgIndex,
                    u16PkgParam);
         }
-        ret = peci_RdPkgConfig(address, u8PkgIndex, u16PkgParam, u8Size,
-                               (uint8_t*)&u32PkgValue, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_RdPkgConfig(address, u8PkgIndex, u16PkgParam, u8Size,
+                                   (uint8_t*)&u32PkgValue, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
+                           u32PkgValue);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2, u32PkgValue);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "wrpkgconfig") == 0)
     {
@@ -259,15 +363,25 @@ int main(int argc, char* argv[])
             printf("Pkg Write of Index %02x Param %04x: 0x%0*x\n", u8PkgIndex,
                    u16PkgParam, u8Size * 2, u32PkgValue);
         }
-        ret = peci_WrPkgConfig(address, u8PkgIndex, u16PkgParam, u32PkgValue,
-                               u8Size, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_WrPkgConfig(address, u8PkgIndex, u16PkgParam,
+                                   u32PkgValue, u8Size, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                }
+                printf("   cc:0x%02x\n", cc);
+            }
         }
-        printf("   cc:0x%02x\n", cc);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "rdiamsr") == 0)
     {
@@ -288,15 +402,30 @@ int main(int argc, char* argv[])
             printf("MSR Read of Thread %02x MSR %04x\n", u8MsrThread,
                    u16MsrAddr);
         }
-        ret = peci_RdIAMSR(address, u8MsrThread, u16MsrAddr, &u64MsrVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret =
+                peci_RdIAMSR(address, u8MsrThread, u16MsrAddr, &u64MsrVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2,
+                           (unsigned long long)u64MsrVal);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2,
-               (unsigned long long)u64MsrVal);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "rdpciconfig") == 0)
     {
@@ -325,15 +454,30 @@ int main(int argc, char* argv[])
             printf("PCI Read of %02x:%02x:%02x Reg %02x\n", u8PciBus, u8PciDev,
                    u8PciFunc, u16PciReg);
         }
-        ret = peci_RdPCIConfig(address, u8PciBus, u8PciDev, u8PciFunc,
-                               u16PciReg, (uint8_t*)&u32PciReadVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_RdPCIConfig(address, u8PciBus, u8PciDev, u8PciFunc,
+                                   u16PciReg, (uint8_t*)&u32PciReadVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
+                           u32PciReadVal);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2, u32PciReadVal);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "rdpciconfiglocal") == 0)
     {
@@ -362,16 +506,31 @@ int main(int argc, char* argv[])
             printf("Local PCI Read of %02x:%02x:%02x Reg %02x\n", u8PciBus,
                    u8PciDev, u8PciFunc, u16PciReg);
         }
-        ret = peci_RdPCIConfigLocal(address, u8PciBus, u8PciDev, u8PciFunc,
-                                    u16PciReg, u8Size, (uint8_t*)&u32PciReadVal,
-                                    &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_RdPCIConfigLocal(address, u8PciBus, u8PciDev, u8PciFunc,
+                                        u16PciReg, u8Size,
+                                        (uint8_t*)&u32PciReadVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
+                           u32PciReadVal);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2, u32PciReadVal);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "wrpciconfiglocal") == 0)
     {
@@ -402,15 +561,25 @@ int main(int argc, char* argv[])
                    u8PciBus, u8PciDev, u8PciFunc, u16PciReg, u8Size * 2,
                    u32PciWriteVal);
         }
-        ret = peci_WrPCIConfigLocal(address, u8PciBus, u8PciDev, u8PciFunc,
-                                    u16PciReg, u8Size, u32PciWriteVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_WrPCIConfigLocal(address, u8PciBus, u8PciDev, u8PciFunc,
+                                        u16PciReg, u8Size, u32PciWriteVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                }
+                printf("   cc:0x%02x\n", cc);
+            }
         }
-        printf("   cc:0x%02x\n", cc);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "rdendpointconfigpcilocal") == 0)
     {
@@ -436,16 +605,31 @@ int main(int argc, char* argv[])
                 "Endpoint Local PCI Read of Seg:%02x %02x:%02x:%02x Reg %02x\n",
                 u8Seg, u8PciBus, u8PciDev, u8PciFunc, u16PciReg);
         }
-        ret = peci_RdEndPointConfigPciLocal(address, u8Seg, u8PciBus, u8PciDev,
-                                            u8PciFunc, u16PciReg, u8Size,
-                                            (uint8_t*)&u32PciReadVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_RdEndPointConfigPciLocal(
+                address, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u16PciReg,
+                u8Size, (uint8_t*)&u32PciReadVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
+                           u32PciReadVal);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2, u32PciReadVal);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "wrendpointconfigpcilocal") == 0)
     {
@@ -473,16 +657,26 @@ int main(int argc, char* argv[])
                    u8Seg, u8PciBus, u8PciDev, u8PciFunc, u16PciReg, u8Size * 2,
                    u32PciWriteVal);
         }
-        ret = peci_WrEndPointPCIConfigLocal(address, u8Seg, u8PciBus, u8PciDev,
-                                            u8PciFunc, u16PciReg, u8Size,
-                                            u32PciWriteVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_WrEndPointPCIConfigLocal(address, u8Seg, u8PciBus,
+                                                u8PciDev, u8PciFunc, u16PciReg,
+                                                u8Size, u32PciWriteVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                }
+                printf("   cc:0x%02x\n", cc);
+            }
         }
-        printf("   cc:0x%02x\n", cc);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "rdendpointconfigpci") == 0)
     {
@@ -506,16 +700,31 @@ int main(int argc, char* argv[])
             printf("Endpoint PCI Read of Seg:%02x %02x:%02x:%02x Reg %02x\n",
                    u8Seg, u8PciBus, u8PciDev, u8PciFunc, u16PciReg);
         }
-        ret = peci_RdEndPointConfigPci(address, u8Seg, u8PciBus, u8PciDev,
-                                       u8PciFunc, u16PciReg, u8Size,
-                                       (uint8_t*)&u32PciReadVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_RdEndPointConfigPci(address, u8Seg, u8PciBus, u8PciDev,
+                                           u8PciFunc, u16PciReg, u8Size,
+                                           (uint8_t*)&u32PciReadVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
+                           u32PciReadVal);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2, u32PciReadVal);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "wrendpointconfigpci") == 0)
     {
@@ -542,16 +751,26 @@ int main(int argc, char* argv[])
                    u8Seg, u8PciBus, u8PciDev, u8PciFunc, u16PciReg, u8Size * 2,
                    u32PciWriteVal);
         }
-        ret = peci_WrEndPointPCIConfig(address, u8Seg, u8PciBus, u8PciDev,
-                                       u8PciFunc, u16PciReg, u8Size,
-                                       u32PciWriteVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_WrEndPointPCIConfig(address, u8Seg, u8PciBus, u8PciDev,
+                                           u8PciFunc, u16PciReg, u8Size,
+                                           u32PciWriteVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                }
+                printf("   cc:0x%02x\n", cc);
+            }
         }
-        printf("   cc:0x%02x\n", cc);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "rdendpointconfigmmio") == 0)
     {
@@ -579,16 +798,31 @@ int main(int argc, char* argv[])
                    u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8AddrType, u8Bar,
                    u64Offset);
         }
-        ret = peci_RdEndPointConfigMmio(address, u8Seg, u8PciBus, u8PciDev,
-                                        u8PciFunc, u8Bar, u8AddrType, u64Offset,
-                                        u8Size, (uint8_t*)&u32PciReadVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_RdEndPointConfigMmio(
+                address, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
+                u8AddrType, u64Offset, u8Size, (uint8_t*)&u32PciReadVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else
+                {
+                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
+                           u32PciReadVal);
+                }
+            }
         }
-        printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2, u32PciReadVal);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "wrendpointconfigmmio") == 0)
     {
@@ -618,16 +852,26 @@ int main(int argc, char* argv[])
                    u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8AddrType, u8Bar,
                    u64Offset, u8Size * 2, u64MmioWriteVal);
         }
-        ret = peci_WrEndPointConfigMmio(address, u8Seg, u8PciBus, u8PciDev,
-                                        u8PciFunc, u8Bar, u8AddrType, u64Offset,
-                                        u8Size, u64MmioWriteVal, &cc);
-        if (0 != ret)
+        while (loops--)
         {
-            printf("ERROR %d: command failed\n", ret);
-            printf("   cc:0x%02x\n", cc);
-            return 1;
+            ret = peci_WrEndPointConfigMmio(
+                address, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
+                u8AddrType, u64Offset, u8Size, u64MmioWriteVal, &cc);
+            incrementCCCounts(cc, ccs, ccCounts, &ccIndex);
+
+            if (verbose || loops == 0)
+            {
+                if (0 != ret)
+                {
+                    printf("ERROR %d: command failed\n", ret);
+                }
+                printf("   cc:0x%02x\n", cc);
+            }
         }
-        printf("   cc:0x%02x\n", cc);
+        if (looped)
+        {
+            printLoopSummary(ccs, ccCounts, ccIndex);
+        }
     }
     else if (strcmp(cmd, "raw") == 0)
     {
@@ -680,30 +924,39 @@ int main(int argc, char* argv[])
             free(rawCmd);
             return 1;
         }
-        ret = peci_raw(rawAddr, readLength, rawCmd, writeLength, rawResp,
-                       readLength);
-        if (verbose)
+        while (loops--)
         {
-            printf("Raw response: ");
+            ret = peci_raw(rawAddr, readLength, rawCmd, writeLength, rawResp,
+                           readLength);
+            if (verbose)
+            {
+                printf("   ");
+                for (i = 0; i < readLength; i++)
+                {
+                    printf("0x%02x ", rawResp[i]);
+                }
+                printf("\n");
+            }
+            incrementCCCounts(rawResp[0], ccs, ccCounts, &ccIndex);
+        }
+        if (!verbose)
+        {
+            if (0 != ret)
+            {
+                printf("ERROR %d: command failed\n", ret);
+            }
+            printf("   ");
             for (i = 0; i < readLength; i++)
             {
                 printf("0x%02x ", rawResp[i]);
             }
             printf("\n");
         }
-        if (0 != ret)
+
+        if (looped)
         {
-            printf("ERROR %d: command failed\n", ret);
-            free(rawCmd);
-            free(rawResp);
-            return 1;
+            printLoopSummary(ccs, ccCounts, ccIndex);
         }
-        printf("   ");
-        for (i = 0; i < readLength; i++)
-        {
-            printf("0x%02x ", rawResp[i]);
-        }
-        printf("\n");
 
         free(rawCmd);
         free(rawResp);
