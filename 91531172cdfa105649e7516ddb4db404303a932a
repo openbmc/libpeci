@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b9fd1c42_b2423941",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f48783e5_2e4edb85",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f49cfe4_4cc94394",
         "filename": "peci_cmds.c",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "321bd5bf_027234c4",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "The error retcodes here are only from the BMC driver and are an indication that the command did not go through.  It will error out on things like a bad command or the CPU being off.\n\nHowever, timeouts may be different.  I\u0027ll check that.",
+      "parentUuid": "4f49cfe4_4cc94394",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc52e3ce_050064ea",
         "filename": "peci_cmds.c",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2021-04-19T18:22:35Z",
       "side": 1,
       "message": "If you use the binning array, then you can just print the portions of the array that have non-zero cc counts.\nfor (i \u003d 0 i \u003c 256; i++) {\n if (ccs[i]) {printf ( \" \" , i, ccs[i]);}\n}",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57dfd39f_f8c080ed",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "ccIndex is a count of how many different CCs were returned.  So, if everything was a success, then ccIndex will be 1.",
+      "parentUuid": "bc52e3ce_050064ea",
       "revId": "91531172cdfa105649e7516ddb4db404303a932a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "2cbeae63_c6466f9f",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "I like this idea, but I\u0027d prefer to wait for the folks who asked for this feature to request it.  They\u0027ll be scripting mostly, so I don\u0027t think they\u0027ll want a forever loop.",
+      "parentUuid": "58b50d37_fe58ad7a",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e78941c_b43aac50",
         "filename": "peci_cmds.c",
         "patchSetId": 2
@@ -84,6 +156,24 @@
       "revId": "91531172cdfa105649e7516ddb4db404303a932a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "339d2994_ace3a777",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e78941c_b43aac50",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "67af6a9e_71a1c37f",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a328ce1b_20df7e81",
+      "range": {
+        "startLine": 232,
+        "startChar": 27,
+        "endLine": 232,
+        "endChar": 46
+      },
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef2801cc_f64e016f",
         "filename": "peci_cmds.c",
         "patchSetId": 2
@@ -121,6 +235,24 @@
       "writtenOn": "2021-04-19T18:22:35Z",
       "side": 1,
       "message": "You may want to add a \"always continue\" command line switch.\nSometimes you just want the action to continue in spite of errors.\nEx: if (stopOnErrors \u0026\u0026 (0 !\u003d ret))",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "339c00c1_ba857a89",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T21:35:42Z",
+      "side": 1,
+      "message": "I\u0027m looking into this.  I think I may have it just keep going regardless of errors.  I checked and Ctrl-C will manually stop if needed.",
+      "parentUuid": "ef2801cc_f64e016f",
       "revId": "91531172cdfa105649e7516ddb4db404303a932a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
