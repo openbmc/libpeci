@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "6bac1bfe_18037741",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T22:36:38Z",
+      "side": 1,
+      "message": "I think I now fixed this.  I decided to just always finish the loop and not bail on an error.",
+      "parentUuid": "452c13e0_add736c8",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79a04b8b_0450764c",
         "filename": "peci_cmds.c",
         "patchSetId": 2
@@ -104,6 +122,24 @@
       "revId": "91531172cdfa105649e7516ddb4db404303a932a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cae16f5_727519e4",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T22:36:38Z",
+      "side": 1,
+      "message": "Thanks! I fixed this in the latest patch set by adding a \"CC_MAX\".  But just as I wrote this, I get what you\u0027re saying.  I\u0027ll try it and see how it looks.",
+      "parentUuid": "79a04b8b_0450764c",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -291,6 +327,24 @@
       "revId": "91531172cdfa105649e7516ddb4db404303a932a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25b4dad8_0ae7d54c",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2021-04-19T22:36:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "339c00c1_ba857a89",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
