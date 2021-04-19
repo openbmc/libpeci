@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f48783e5_2e4edb85",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "Include \"[-h]\" \"[-v]\" and \"[-l \u003ccount\u003e]\" in the command line switches?",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f49cfe4_4cc94394",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "-l \u003ccount\u003e\n\n\u003ccount\u003e is in the range 1 to 4294967295\n\nI also, as you will see below, recommend allow \u00270\u0027 to be 4Gi - 1\n\nI also recommend another switch, perhaps -k, that causes the loops to ignore retcodes, and just keep performing the peci action. HW guys will thank you.",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc52e3ce_050064ea",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "If you use the binning array, then you can just print the portions of the array that have non-zero cc counts.\nfor (i \u003d 0 i \u003c 256; i++) {\n if (ccs[i]) {printf ( \" \" , i, ccs[i]);}\n}",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58b50d37_fe58ad7a",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "I recommend using \u00270\u0027 as the \u0027loop forever\u0027 input. Yes 4Gi is effectively forever. Who wants to write -l 4294967295?\nAlternately make 0 the same as entering 4294967295",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e78941c_b43aac50",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "while (loops--) ?\nYou don\u0027t seem to be using \"loop\" for any secondary purpose.",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a328ce1b_20df7e81",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "(loops \u003d\u003d 1)?\n\nApply to all subsequent commands?",
+      "range": {
+        "startLine": 232,
+        "startChar": 27,
+        "endLine": 232,
+        "endChar": 46
+      },
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef2801cc_f64e016f",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T18:22:35Z",
+      "side": 1,
+      "message": "You may want to add a \"always continue\" command line switch.\nSometimes you just want the action to continue in spite of errors.\nEx: if (stopOnErrors \u0026\u0026 (0 !\u003d ret))",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
