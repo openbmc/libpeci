@@ -72,6 +72,41 @@
     },
     {
       "key": {
+        "uuid": "452c13e0_add736c8",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T22:03:45Z",
+      "side": 1,
+      "message": "I realize the error codes are from the driver. The recommendation is for when those errors *do* occur, and they are unexpected. In HW debug it is nice to have a way to keep transmitting a failing request in order to see the electrical artifacts that may be causing the failure. I recommend putting the feature into a follow on commit.",
+      "parentUuid": "321bd5bf_027234c4",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79a04b8b_0450764c",
+        "filename": "peci_cmds.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2021-04-19T22:03:45Z",
+      "side": 1,
+      "message": "Somehow a comment got dropped:\nWhat keeps ccIndex from exceeding the size of your arrays?\nThis is why I recommended the bin method below. You will only ever have CC\u0027s in the range from 0 to 255.",
+      "revId": "91531172cdfa105649e7516ddb4db404303a932a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc52e3ce_050064ea",
         "filename": "peci_cmds.c",
         "patchSetId": 2
