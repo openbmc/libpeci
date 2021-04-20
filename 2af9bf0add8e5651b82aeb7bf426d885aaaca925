@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a847a985_90991bda",
+        "filename": "peci_cmds.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000409
+      },
+      "writtenOn": "2021-04-20T17:41:55Z",
+      "side": 1,
+      "message": "No strong feelings about it. Ok if you want to leave 256",
+      "parentUuid": "ac9dd50d_c31d84a7",
+      "range": {
+        "startLine": 27,
+        "startChar": 17,
+        "endLine": 27,
+        "endChar": 21
+      },
+      "revId": "2af9bf0add8e5651b82aeb7bf426d885aaaca925",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e494b03_0d301a32",
         "filename": "peci_cmds.c",
         "patchSetId": 7
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Non C programmers reading the help won\u0027t know ULONG_MAX.\nI recommend keeping a numeric representation that all lay people will understand.",
       "parentUuid": "4e494b03_0d301a32",
+      "range": {
+        "startLine": 43,
+        "startChar": 23,
+        "endLine": 43,
+        "endChar": 33
+      },
+      "revId": "2af9bf0add8e5651b82aeb7bf426d885aaaca925",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da6f0aca_7ef60f2e",
+        "filename": "peci_cmds.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000409
+      },
+      "writtenOn": "2021-04-20T17:41:55Z",
+      "side": 1,
+      "message": "I suggested this because the man page for strtoul specifically mentions ULONG_MAX",
+      "parentUuid": "29aaf8da_690489f9",
       "range": {
         "startLine": 43,
         "startChar": 23,
