@@ -33,6 +33,8 @@ typedef enum
 {
     skx = 0x00050650,
     icx = 0x000606A0,
+    icxd = 0x000606C0,
+    spr = 0x000806F0,
 } CPUModel;
 
 // PECI Status Codes
