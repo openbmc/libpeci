@@ -7,6 +7,8 @@ set_property(TARGET peci PROPERTY C_STANDARD 99)
 target_include_directories(peci PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(peci PROPERTIES VERSION "1.0" SOVERSION "1")
 
+option(DBUS_RAW_PECI "Add the raw PECI D-Bus daemon to the build." OFF)
+
 set(
   CMAKE_C_FLAGS
   "${CMAKE_C_FLAGS} \
@@ -38,3 +40,28 @@ install(TARGETS peci_cmds
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib/static)
+
+if(${DBUS_RAW_PECI})
+  add_executable(raw-peci dbus_raw_peci.cpp)
+  add_dependencies(raw-peci peci)
+
+  find_package(Boost 1.73 REQUIRED)
+  include_directories(${BOOST_SRC_DIR})
+
+  add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
+  add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
+  add_definitions(-DBOOST_ALL_NO_LIB)
+  add_definitions(-DBOOST_NO_RTTI)
+  add_definitions(-DBOOST_NO_TYPEID)
+
+  target_link_libraries(raw-peci peci -lsystemd sdbusplus)
+
+  install(TARGETS raw-peci
+          RUNTIME DESTINATION bin
+          LIBRARY DESTINATION lib
+          ARCHIVE DESTINATION lib/static)
+
+  set(SERVICE_FILES ${PROJECT_SOURCE_DIR}/service_files/com.intel.peci.service)
+
+  install(FILES ${SERVICE_FILES} DESTINATION /lib/systemd/system/)
+endif()
