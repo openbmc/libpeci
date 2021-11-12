@@ -1,0 +1,11 @@
+[Unit]
+Description=Intel CPU Raw PECI interface
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/raw-peci
+Type=dbus
+BusName=com.intel.peci
+
+[Install]
+WantedBy=multi-user.target
