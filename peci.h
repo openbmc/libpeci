@@ -102,13 +102,12 @@ EPECIStatus peci_GetTemp(uint8_t target, int16_t* temperature);
 
 // Provides read access to the package configuration space within the processor
 EPECIStatus peci_RdPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Value,
-                             uint8_t u8ReadLen, uint8_t* pPkgConfig,
-                             uint8_t* cc);
+                             uint8_t u8ReadLen, void* readData, uint8_t* cc);
 
 // Allows sequential RdPkgConfig with the provided peci file descriptor
 EPECIStatus peci_RdPkgConfig_seq(uint8_t target, uint8_t u8Index,
                                  uint16_t u16Value, uint8_t u8ReadLen,
-                                 uint8_t* pPkgConfig, int peci_fd, uint8_t* cc);
+                                 void* readData, int peci_fd, uint8_t* cc);
 
 // Provides write access to the package configuration space within the processor
 EPECIStatus peci_WrPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Param,
@@ -122,31 +121,30 @@ EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
 
 // Provides read access to Model Specific Registers
 EPECIStatus peci_RdIAMSR(uint8_t target, uint8_t threadID, uint16_t MSRAddress,
-                         uint64_t* u64MsrVal, uint8_t* cc);
+                         void* u64MsrVal, uint8_t* cc);
 
 // Provides read access to PCI Configuration space
 EPECIStatus peci_RdPCIConfig(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
-                             uint8_t u8Fcn, uint16_t u16Reg, uint8_t* pPCIReg,
+                             uint8_t u8Fcn, uint16_t u16Reg, void* readData,
                              uint8_t* cc);
 
 // Allows sequential RdPCIConfig with the provided peci file descriptor
 EPECIStatus peci_RdPCIConfig_seq(uint8_t target, uint8_t u8Bus,
                                  uint8_t u8Device, uint8_t u8Fcn,
-                                 uint16_t u16Reg, uint8_t* pPCIData,
-                                 int peci_fd, uint8_t* cc);
+                                 uint16_t u16Reg, void* readData, int peci_fd,
+                                 uint8_t* cc);
 
 // Provides read access to the local PCI Configuration space
 EPECIStatus peci_RdPCIConfigLocal(uint8_t target, uint8_t u8Bus,
                                   uint8_t u8Device, uint8_t u8Fcn,
                                   uint16_t u16Reg, uint8_t u8ReadLen,
-                                  uint8_t* pPCIReg, uint8_t* cc);
+                                  void* readData, uint8_t* cc);
 
 // Allows sequential RdPCIConfigLocal with the provided peci file descriptor
 EPECIStatus peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus,
                                       uint8_t u8Device, uint8_t u8Fcn,
                                       uint16_t u16Reg, uint8_t u8ReadLen,
-                                      uint8_t* pPCIReg, int peci_fd,
-                                      uint8_t* cc);
+                                      void* readData, int peci_fd, uint8_t* cc);
 
 // Provides write access to the local PCI Configuration space
 EPECIStatus peci_WrPCIConfigLocal(uint8_t target, uint8_t u8Bus,
@@ -155,100 +153,119 @@ EPECIStatus peci_WrPCIConfigLocal(uint8_t target, uint8_t u8Bus,
                                   uint32_t DataVal, uint8_t* cc);
 
 // Provides read access to PCI configuration space
-EPECIStatus peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfig(uint8_t target, uint8_t u8Seg,
                                      uint8_t u8Bus, uint8_t u8Device,
                                      uint8_t u8Fcn, uint16_t u16Reg,
-                                     uint8_t u8ReadLen, uint8_t* pPCIData,
+                                     uint8_t u8ReadLen, void* readData,
                                      uint8_t* cc);
+// Deprecated function name
+#define peci_RdEndPointConfigPci peci_RdEndPointPciConfig
 
 // Allows sequential RdEndPointConfig to PCI Configuration space
-EPECIStatus peci_RdEndPointConfigPci_seq(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfig_seq(uint8_t target, uint8_t u8Seg,
                                          uint8_t u8Bus, uint8_t u8Device,
                                          uint8_t u8Fcn, uint16_t u16Reg,
-                                         uint8_t u8ReadLen, uint8_t* pPCIData,
+                                         uint8_t u8ReadLen, void* readData,
                                          int peci_fd, uint8_t* cc);
+// Deprecated function name
+#define peci_RdEndPointConfigPci_seq peci_RdEndPointPciConfig_seq
 
 // Provides read access to the local PCI configuration space
-EPECIStatus peci_RdEndPointConfigPciLocal(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfigLocal(uint8_t target, uint8_t u8Seg,
                                           uint8_t u8Bus, uint8_t u8Device,
                                           uint8_t u8Fcn, uint16_t u16Reg,
-                                          uint8_t u8ReadLen, uint8_t* pPCIData,
+                                          uint8_t u8ReadLen, void* readData,
                                           uint8_t* cc);
+// Deprecated function name
+#define peci_RdEndPointConfigPciLocal peci_RdEndPointPciConfigLocal
 
 // Allows sequential RdEndPointConfig to the local PCI Configuration space
-EPECIStatus peci_RdEndPointConfigPciLocal_seq(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfigLocal_seq(uint8_t target, uint8_t u8Seg,
                                               uint8_t u8Bus, uint8_t u8Device,
                                               uint8_t u8Fcn, uint16_t u16Reg,
-                                              uint8_t u8ReadLen,
-                                              uint8_t* pPCIData, int peci_fd,
-                                              uint8_t* cc);
+                                              uint8_t u8ReadLen, void* readData,
+                                              int peci_fd, uint8_t* cc);
+// Deprecated function name
+#define peci_RdEndPointConfigPciLocal_seq peci_RdEndPointPciConfigLocal_seq
 
 // Provides read access to PCI MMIO space
-EPECIStatus peci_RdEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
-                                      uint8_t u8Bus, uint8_t u8Device,
-                                      uint8_t u8Fcn, uint8_t u8Bar,
-                                      uint8_t u8AddrType, uint64_t u64Offset,
-                                      uint8_t u8ReadLen, uint8_t* pMmioData,
-                                      uint8_t* cc);
+EPECIStatus peci_RdEndPointMmio(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
+                                uint8_t u8Device, uint8_t u8Fcn, uint8_t u8Bar,
+                                uint8_t u8AddrType, uint64_t u64Offset,
+                                uint8_t u8ReadLen, void* readData, uint8_t* cc);
+// Deprecated function name
+#define peci_RdEndPointConfigMmio peci_RdEndPointMmio
 
 // Allows sequential RdEndPointConfig to PCI MMIO space
-EPECIStatus peci_RdEndPointConfigMmio_seq(
-    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
-    uint8_t u8Fcn, uint8_t u8Bar, uint8_t u8AddrType, uint64_t u64Offset,
-    uint8_t u8ReadLen, uint8_t* pMmioData, int peci_fd, uint8_t* cc);
+EPECIStatus peci_RdEndPointMmio_seq(uint8_t target, uint8_t u8Seg,
+                                    uint8_t u8Bus, uint8_t u8Device,
+                                    uint8_t u8Fcn, uint8_t u8Bar,
+                                    uint8_t u8AddrType, uint64_t u64Offset,
+                                    uint8_t u8ReadLen, void* readData,
+                                    int peci_fd, uint8_t* cc);
+// Deprecated function name
+#define peci_RdEndPointConfigMmio_seq peci_RdEndPointMmio_seq
 
 // Provides write access to the EP local PCI Configuration space
-EPECIStatus peci_WrEndPointPCIConfigLocal(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_WrEndPointPciConfigLocal(uint8_t target, uint8_t u8Seg,
                                           uint8_t u8Bus, uint8_t u8Device,
                                           uint8_t u8Fcn, uint16_t u16Reg,
                                           uint8_t DataLen, uint32_t DataVal,
                                           uint8_t* cc);
+// Deprecated function name
+#define peci_WrEndPointPCIConfigLocal peci_WrEndPointPciConfigLocal
 
 // Provides write access to the EP PCI Configuration space
-EPECIStatus peci_WrEndPointPCIConfig(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_WrEndPointPciConfig(uint8_t target, uint8_t u8Seg,
                                      uint8_t u8Bus, uint8_t u8Device,
                                      uint8_t u8Fcn, uint16_t u16Reg,
                                      uint8_t DataLen, uint32_t DataVal,
                                      uint8_t* cc);
+// Deprecated function name
+#define peci_WrEndPointPCIConfig peci_WrEndPointPciConfig
 
 // Allows sequential write access to the EP PCI Configuration space
-EPECIStatus peci_WrEndPointConfig_seq(uint8_t target, uint8_t u8MsgType,
-                                      uint8_t u8Seg, uint8_t u8Bus,
-                                      uint8_t u8Device, uint8_t u8Fcn,
-                                      uint16_t u16Reg, uint8_t DataLen,
-                                      uint32_t DataVal, int peci_fd,
-                                      uint8_t* cc);
+EPECIStatus peci_WrEndPointPciConfigCommon_seq(
+    uint8_t target, uint8_t u8MsgType, uint8_t u8Seg, uint8_t u8Bus,
+    uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg, uint8_t DataLen,
+    uint32_t DataVal, int peci_fd, uint8_t* cc);
+// Deprecated function name
+#define peci_WrEndPoint_seq peci_WrEndPointPciConfigCommon_seq
 
 // Provides write access to the EP PCI MMIO space
-EPECIStatus peci_WrEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
-                                      uint8_t u8Bus, uint8_t u8Device,
-                                      uint8_t u8Fcn, uint8_t u8Bar,
-                                      uint8_t u8AddrType, uint64_t u64Offset,
-                                      uint8_t u8DataLen, uint64_t u64DataVal,
-                                      uint8_t* cc);
+EPECIStatus peci_WrEndPointMmio(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
+                                uint8_t u8Device, uint8_t u8Fcn, uint8_t u8Bar,
+                                uint8_t u8AddrType, uint64_t u64Offset,
+                                uint8_t u8DataLen, uint64_t u64DataVal,
+                                uint8_t* cc);
+// Deprecated function name
+#define peci_WrEndPointConfigMmio peci_WrEndPointMmio
 
 // Allows sequential write access to the EP PCI MMIO space
-EPECIStatus peci_WrEndPointConfigMmio_seq(
-    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
-    uint8_t u8Fcn, uint8_t u8Bar, uint8_t u8AddrType, uint64_t u64Offset,
-    uint8_t u8DataLen, uint64_t u64DataVal, int peci_fd, uint8_t* cc);
+EPECIStatus peci_WrEndPointMmio_seq(uint8_t target, uint8_t u8Seg,
+                                    uint8_t u8Bus, uint8_t u8Device,
+                                    uint8_t u8Fcn, uint8_t u8Bar,
+                                    uint8_t u8AddrType, uint64_t u64Offset,
+                                    uint8_t u8DataLen, uint64_t u64DataVal,
+                                    int peci_fd, uint8_t* cc);
+// Deprecated function name
+#define peci_WrEndPointConfigMmio_seq peci_WrEndPointMmio_seq
 
 // Provides access to the Crashdump Discovery API
 EPECIStatus peci_CrashDump_Discovery(uint8_t target, uint8_t subopcode,
                                      uint8_t param0, uint16_t param1,
                                      uint8_t param2, uint8_t u8ReadLen,
-                                     uint8_t* pData, uint8_t* cc);
+                                     void* pData, uint8_t* cc);
 
 // Provides access to the Crashdump GetFrame API
 EPECIStatus peci_CrashDump_GetFrame(uint8_t target, uint16_t param0,
                                     uint16_t param1, uint16_t param2,
-                                    uint8_t u8ReadLen, uint8_t* pData,
+                                    uint8_t u8ReadLen, void* pData,
                                     uint8_t* cc);
 
 // Provides raw PECI command access
 EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
-                     const uint32_t cmdSize, uint8_t* pRawResp,
-                     uint32_t respSize);
+                     const uint32_t cmdSize, void* pRawResp, uint32_t respSize);
 
 EPECIStatus peci_Lock(int* peci_fd, int timeout_ms);
 void peci_Unlock(int peci_fd);

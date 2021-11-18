@@ -394,13 +394,12 @@ EPECIStatus peci_GetTemp(uint8_t target, int16_t* temperature)
  * space within the processor.
  *------------------------------------------------------------------------*/
 EPECIStatus peci_RdPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Value,
-                             uint8_t u8ReadLen, uint8_t* pPkgConfig,
-                             uint8_t* cc)
+                             uint8_t u8ReadLen, void* readData, uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPkgConfig == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -415,7 +414,7 @@ EPECIStatus peci_RdPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Value,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret = peci_RdPkgConfig_seq(target, u8Index, u16Value, u8ReadLen, pPkgConfig,
+    ret = peci_RdPkgConfig_seq(target, u8Index, u16Value, u8ReadLen, readData,
                                peci_fd, cc);
 
     peci_Close(peci_fd);
@@ -428,12 +427,12 @@ EPECIStatus peci_RdPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Value,
  *------------------------------------------------------------------------*/
 EPECIStatus peci_RdPkgConfig_seq(uint8_t target, uint8_t u8Index,
                                  uint16_t u16Value, uint8_t u8ReadLen,
-                                 uint8_t* pPkgConfig, int peci_fd, uint8_t* cc)
+                                 void* readData, int peci_fd, uint8_t* cc)
 {
     struct peci_rd_pkg_cfg_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPkgConfig == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -465,7 +464,7 @@ EPECIStatus peci_RdPkgConfig_seq(uint8_t target, uint8_t u8Index,
     *cc = cmd.cc;
     if (ret == PECI_CC_SUCCESS)
     {
-        memcpy(pPkgConfig, cmd.pkg_config, u8ReadLen);
+        memcpy(readData, cmd.pkg_config, u8ReadLen);
     }
 
     return ret;
@@ -548,7 +547,7 @@ EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
  * defined in the processor doc.
  *------------------------------------------------------------------------*/
 EPECIStatus peci_RdIAMSR(uint8_t target, uint8_t threadID, uint16_t MSRAddress,
-                         uint64_t* u64MsrVal, uint8_t* cc)
+                         void* u64MsrVal, uint8_t* cc)
 {
     int peci_fd = -1;
     struct peci_rd_ia_msr_msg cmd = {};
@@ -578,7 +577,7 @@ EPECIStatus peci_RdIAMSR(uint8_t target, uint8_t threadID, uint16_t MSRAddress,
     *cc = cmd.cc;
     if (ret == PECI_CC_SUCCESS)
     {
-        *u64MsrVal = cmd.value;
+        *(uint64_t*)u64MsrVal = cmd.value;
     }
 
     peci_Close(peci_fd);
@@ -590,13 +589,13 @@ EPECIStatus peci_RdIAMSR(uint8_t target, uint8_t threadID, uint16_t MSRAddress,
  * the requested PCI configuration address.
  *------------------------------------------------------------------------*/
 EPECIStatus peci_RdPCIConfig(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
-                             uint8_t u8Fcn, uint16_t u16Reg, uint8_t* pPCIData,
+                             uint8_t u8Fcn, uint16_t u16Reg, void* readData,
                              uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -611,7 +610,7 @@ EPECIStatus peci_RdPCIConfig(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret = peci_RdPCIConfig_seq(target, u8Bus, u8Device, u8Fcn, u16Reg, pPCIData,
+    ret = peci_RdPCIConfig_seq(target, u8Bus, u8Device, u8Fcn, u16Reg, readData,
                                peci_fd, cc);
 
     peci_Close(peci_fd);
@@ -624,13 +623,13 @@ EPECIStatus peci_RdPCIConfig(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
  *------------------------------------------------------------------------*/
 EPECIStatus peci_RdPCIConfig_seq(uint8_t target, uint8_t u8Bus,
                                  uint8_t u8Device, uint8_t u8Fcn,
-                                 uint16_t u16Reg, uint8_t* pPCIData,
-                                 int peci_fd, uint8_t* cc)
+                                 uint16_t u16Reg, void* readData, int peci_fd,
+                                 uint8_t* cc)
 {
     struct peci_rd_pci_cfg_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -658,7 +657,7 @@ EPECIStatus peci_RdPCIConfig_seq(uint8_t target, uint8_t u8Bus,
 
     if (ret == PECI_CC_SUCCESS)
     {
-        memcpy(pPCIData, cmd.pci_config, 4);
+        memcpy(readData, cmd.pci_config, 4);
     }
 
     return ret;
@@ -670,12 +669,12 @@ EPECIStatus peci_RdPCIConfig_seq(uint8_t target, uint8_t u8Bus,
 EPECIStatus peci_RdPCIConfigLocal(uint8_t target, uint8_t u8Bus,
                                   uint8_t u8Device, uint8_t u8Fcn,
                                   uint16_t u16Reg, uint8_t u8ReadLen,
-                                  uint8_t* pPCIReg, uint8_t* cc)
+                                  void* readData, uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIReg == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -691,7 +690,7 @@ EPECIStatus peci_RdPCIConfigLocal(uint8_t target, uint8_t u8Bus,
         return PECI_CC_DRIVER_ERR;
     }
     ret = peci_RdPCIConfigLocal_seq(target, u8Bus, u8Device, u8Fcn, u16Reg,
-                                    u8ReadLen, pPCIReg, peci_fd, cc);
+                                    u8ReadLen, readData, peci_fd, cc);
 
     peci_Close(peci_fd);
     return ret;
@@ -704,13 +703,12 @@ EPECIStatus peci_RdPCIConfigLocal(uint8_t target, uint8_t u8Bus,
 EPECIStatus peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus,
                                       uint8_t u8Device, uint8_t u8Fcn,
                                       uint16_t u16Reg, uint8_t u8ReadLen,
-                                      uint8_t* pPCIReg, int peci_fd,
-                                      uint8_t* cc)
+                                      void* readData, int peci_fd, uint8_t* cc)
 {
     struct peci_rd_pci_cfg_local_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIReg == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -745,7 +743,7 @@ EPECIStatus peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus,
 
     if (ret == PECI_CC_SUCCESS)
     {
-        memcpy(pPCIReg, cmd.pci_config, u8ReadLen);
+        memcpy(readData, cmd.pci_config, u8ReadLen);
     }
 
     return ret;
@@ -804,15 +802,17 @@ EPECIStatus peci_WrPCIConfigLocal(uint8_t target, uint8_t u8Bus,
 /*-------------------------------------------------------------------------
  * This internal function is the common interface for RdEndPointConfig to PCI
  *------------------------------------------------------------------------*/
-static EPECIStatus peci_RdEndPointConfigPciCommon(
-    uint8_t target, uint8_t u8MsgType, uint8_t u8Seg, uint8_t u8Bus,
-    uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen,
-    uint8_t* pPCIData, int peci_fd, uint8_t* cc)
+static EPECIStatus peci_RdEndPointPciCommon(uint8_t target, uint8_t u8MsgType,
+                                            uint8_t u8Seg, uint8_t u8Bus,
+                                            uint8_t u8Device, uint8_t u8Fcn,
+                                            uint16_t u16Reg, uint8_t u8ReadLen,
+                                            void* readData, int peci_fd,
+                                            uint8_t* cc)
 {
     struct peci_rd_end_pt_cfg_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -843,7 +843,7 @@ static EPECIStatus peci_RdEndPointConfigPciCommon(
 
     if (ret == PECI_CC_SUCCESS)
     {
-        memcpy(pPCIData, cmd.data, u8ReadLen);
+        memcpy(readData, cmd.data, u8ReadLen);
     }
     else
     {
@@ -857,16 +857,16 @@ static EPECIStatus peci_RdEndPointConfigPciCommon(
  * This function provides read access to the PCI configuration space at
  * the requested PCI configuration address.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfig(uint8_t target, uint8_t u8Seg,
                                      uint8_t u8Bus, uint8_t u8Device,
                                      uint8_t u8Fcn, uint16_t u16Reg,
-                                     uint8_t u8ReadLen, uint8_t* pPCIData,
+                                     uint8_t u8ReadLen, void* readData,
                                      uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -882,8 +882,8 @@ EPECIStatus peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg,
         return PECI_CC_DRIVER_ERR;
     }
     ret =
-        peci_RdEndPointConfigPci_seq(target, u8Seg, u8Bus, u8Device, u8Fcn,
-                                     u16Reg, u8ReadLen, pPCIData, peci_fd, cc);
+        peci_RdEndPointPciConfig_seq(target, u8Seg, u8Bus, u8Device, u8Fcn,
+                                     u16Reg, u8ReadLen, readData, peci_fd, cc);
     peci_Close(peci_fd);
     return ret;
 }
@@ -892,13 +892,13 @@ EPECIStatus peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg,
  * This function allows sequential RdEndPointConfig to PCI with the provided
  * peci file descriptor.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_RdEndPointConfigPci_seq(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfig_seq(uint8_t target, uint8_t u8Seg,
                                          uint8_t u8Bus, uint8_t u8Device,
                                          uint8_t u8Fcn, uint16_t u16Reg,
-                                         uint8_t u8ReadLen, uint8_t* pPCIData,
+                                         uint8_t u8ReadLen, void* readData,
                                          int peci_fd, uint8_t* cc)
 {
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -915,25 +915,25 @@ EPECIStatus peci_RdEndPointConfigPci_seq(uint8_t target, uint8_t u8Seg,
         return PECI_CC_INVALID_REQ;
     }
 
-    return peci_RdEndPointConfigPciCommon(target, PECI_ENDPTCFG_TYPE_PCI, u8Seg,
-                                          u8Bus, u8Device, u8Fcn, u16Reg,
-                                          u8ReadLen, pPCIData, peci_fd, cc);
+    return peci_RdEndPointPciCommon(target, PECI_ENDPTCFG_TYPE_PCI, u8Seg,
+                                    u8Bus, u8Device, u8Fcn, u16Reg, u8ReadLen,
+                                    readData, peci_fd, cc);
 }
 
 /*-------------------------------------------------------------------------
  * This function provides read access to the Local PCI configuration space at
  * the requested PCI configuration address.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_RdEndPointConfigPciLocal(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfigLocal(uint8_t target, uint8_t u8Seg,
                                           uint8_t u8Bus, uint8_t u8Device,
                                           uint8_t u8Fcn, uint16_t u16Reg,
-                                          uint8_t u8ReadLen, uint8_t* pPCIData,
+                                          uint8_t u8ReadLen, void* readData,
                                           uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -948,8 +948,8 @@ EPECIStatus peci_RdEndPointConfigPciLocal(uint8_t target, uint8_t u8Seg,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret = peci_RdEndPointConfigPciLocal_seq(target, u8Seg, u8Bus, u8Device,
-                                            u8Fcn, u16Reg, u8ReadLen, pPCIData,
+    ret = peci_RdEndPointPciConfigLocal_seq(target, u8Seg, u8Bus, u8Device,
+                                            u8Fcn, u16Reg, u8ReadLen, readData,
                                             peci_fd, cc);
     peci_Close(peci_fd);
     return ret;
@@ -959,14 +959,13 @@ EPECIStatus peci_RdEndPointConfigPciLocal(uint8_t target, uint8_t u8Seg,
  * This function allows sequential RdEndPointConfig to PCI Local with the
  *provided peci file descriptor.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_RdEndPointConfigPciLocal_seq(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_RdEndPointPciConfigLocal_seq(uint8_t target, uint8_t u8Seg,
                                               uint8_t u8Bus, uint8_t u8Device,
                                               uint8_t u8Fcn, uint16_t u16Reg,
-                                              uint8_t u8ReadLen,
-                                              uint8_t* pPCIData, int peci_fd,
-                                              uint8_t* cc)
+                                              uint8_t u8ReadLen, void* readData,
+                                              int peci_fd, uint8_t* cc)
 {
-    if (pPCIData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -983,26 +982,24 @@ EPECIStatus peci_RdEndPointConfigPciLocal_seq(uint8_t target, uint8_t u8Seg,
         return PECI_CC_INVALID_REQ;
     }
 
-    return peci_RdEndPointConfigPciCommon(target, PECI_ENDPTCFG_TYPE_LOCAL_PCI,
-                                          u8Seg, u8Bus, u8Device, u8Fcn, u16Reg,
-                                          u8ReadLen, pPCIData, peci_fd, cc);
+    return peci_RdEndPointPciCommon(target, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u8Seg,
+                                    u8Bus, u8Device, u8Fcn, u16Reg, u8ReadLen,
+                                    readData, peci_fd, cc);
 }
 
 /*-------------------------------------------------------------------------
  * This function provides read access to PCI MMIO space at
  * the requested PCI configuration address.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_RdEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
-                                      uint8_t u8Bus, uint8_t u8Device,
-                                      uint8_t u8Fcn, uint8_t u8Bar,
-                                      uint8_t u8AddrType, uint64_t u64Offset,
-                                      uint8_t u8ReadLen, uint8_t* pMmioData,
-                                      uint8_t* cc)
+EPECIStatus peci_RdEndPointMmio(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
+                                uint8_t u8Device, uint8_t u8Fcn, uint8_t u8Bar,
+                                uint8_t u8AddrType, uint64_t u64Offset,
+                                uint8_t u8ReadLen, void* readData, uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pMmioData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -1017,9 +1014,9 @@ EPECIStatus peci_RdEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret = peci_RdEndPointConfigMmio_seq(target, u8Seg, u8Bus, u8Device, u8Fcn,
-                                        u8Bar, u8AddrType, u64Offset, u8ReadLen,
-                                        pMmioData, peci_fd, cc);
+    ret = peci_RdEndPointMmio_seq(target, u8Seg, u8Bus, u8Device, u8Fcn, u8Bar,
+                                  u8AddrType, u64Offset, u8ReadLen, readData,
+                                  peci_fd, cc);
     peci_Close(peci_fd);
     return ret;
 }
@@ -1028,15 +1025,17 @@ EPECIStatus peci_RdEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
  * This function allows sequential RdEndPointConfig to PCI MMIO with the
  *provided peci file descriptor.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_RdEndPointConfigMmio_seq(
-    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
-    uint8_t u8Fcn, uint8_t u8Bar, uint8_t u8AddrType, uint64_t u64Offset,
-    uint8_t u8ReadLen, uint8_t* pMmioData, int peci_fd, uint8_t* cc)
+EPECIStatus peci_RdEndPointMmio_seq(uint8_t target, uint8_t u8Seg,
+                                    uint8_t u8Bus, uint8_t u8Device,
+                                    uint8_t u8Fcn, uint8_t u8Bar,
+                                    uint8_t u8AddrType, uint64_t u64Offset,
+                                    uint8_t u8ReadLen, void* readData,
+                                    int peci_fd, uint8_t* cc)
 {
     struct peci_rd_end_pt_cfg_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (pMmioData == NULL || cc == NULL)
+    if (readData == NULL || cc == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -1075,7 +1074,7 @@ EPECIStatus peci_RdEndPointConfigMmio_seq(
 
     if (ret == PECI_CC_SUCCESS)
     {
-        memcpy(pMmioData, cmd.data, u8ReadLen);
+        memcpy(readData, cmd.data, u8ReadLen);
     }
     else
     {
@@ -1085,16 +1084,10 @@ EPECIStatus peci_RdEndPointConfigMmio_seq(
     return ret;
 }
 
-/*-------------------------------------------------------------------------
- * This function allows sequential peci_WrEndPointConfig to PCI EndPoint with
- *the provided peci file descriptor.
- *------------------------------------------------------------------------*/
-EPECIStatus peci_WrEndPointConfig_seq(uint8_t target, uint8_t u8MsgType,
-                                      uint8_t u8Seg, uint8_t u8Bus,
-                                      uint8_t u8Device, uint8_t u8Fcn,
-                                      uint16_t u16Reg, uint8_t DataLen,
-                                      uint32_t DataVal, int peci_fd,
-                                      uint8_t* cc)
+EPECIStatus peci_WrEndPointPciConfigCommon_seq(
+    uint8_t target, uint8_t u8MsgType, uint8_t u8Seg, uint8_t u8Bus,
+    uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg, uint8_t DataLen,
+    uint32_t DataVal, int peci_fd, uint8_t* cc)
 {
     struct peci_wr_end_pt_cfg_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
@@ -1135,7 +1128,7 @@ EPECIStatus peci_WrEndPointConfig_seq(uint8_t target, uint8_t u8MsgType,
 /*-------------------------------------------------------------------------
  *  This function provides write access to the EP local PCI configuration space
  *------------------------------------------------------------------------*/
-EPECIStatus peci_WrEndPointPCIConfigLocal(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_WrEndPointPciConfigLocal(uint8_t target, uint8_t u8Seg,
                                           uint8_t u8Bus, uint8_t u8Device,
                                           uint8_t u8Fcn, uint16_t u16Reg,
                                           uint8_t DataLen, uint32_t DataVal,
@@ -1149,9 +1142,9 @@ EPECIStatus peci_WrEndPointPCIConfigLocal(uint8_t target, uint8_t u8Seg,
         return PECI_CC_DRIVER_ERR;
     }
 
-    ret = peci_WrEndPointConfig_seq(target, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u8Seg,
-                                    u8Bus, u8Device, u8Fcn, u16Reg, DataLen,
-                                    DataVal, peci_fd, cc);
+    ret = peci_WrEndPointPciConfigCommon_seq(
+        target, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u8Seg, u8Bus, u8Device, u8Fcn,
+        u16Reg, DataLen, DataVal, peci_fd, cc);
     peci_Close(peci_fd);
     return ret;
 }
@@ -1159,7 +1152,7 @@ EPECIStatus peci_WrEndPointPCIConfigLocal(uint8_t target, uint8_t u8Seg,
 /*-------------------------------------------------------------------------
  *  This function provides write access to the EP local PCI configuration space
  *------------------------------------------------------------------------*/
-EPECIStatus peci_WrEndPointPCIConfig(uint8_t target, uint8_t u8Seg,
+EPECIStatus peci_WrEndPointPciConfig(uint8_t target, uint8_t u8Seg,
                                      uint8_t u8Bus, uint8_t u8Device,
                                      uint8_t u8Fcn, uint16_t u16Reg,
                                      uint8_t DataLen, uint32_t DataVal,
@@ -1172,9 +1165,9 @@ EPECIStatus peci_WrEndPointPCIConfig(uint8_t target, uint8_t u8Seg,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret = peci_WrEndPointConfig_seq(target, PECI_ENDPTCFG_TYPE_PCI, u8Seg,
-                                    u8Bus, u8Device, u8Fcn, u16Reg, DataLen,
-                                    DataVal, peci_fd, cc);
+    ret = peci_WrEndPointPciConfigCommon_seq(
+        target, PECI_ENDPTCFG_TYPE_PCI, u8Seg, u8Bus, u8Device, u8Fcn, u16Reg,
+        DataLen, DataVal, peci_fd, cc);
     peci_Close(peci_fd);
     return ret;
 }
@@ -1183,12 +1176,11 @@ EPECIStatus peci_WrEndPointPCIConfig(uint8_t target, uint8_t u8Seg,
  * This function provides write access to PCI MMIO space at
  * the requested PCI configuration address.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_WrEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
-                                      uint8_t u8Bus, uint8_t u8Device,
-                                      uint8_t u8Fcn, uint8_t u8Bar,
-                                      uint8_t u8AddrType, uint64_t u64Offset,
-                                      uint8_t u8DataLen, uint64_t u64DataVal,
-                                      uint8_t* cc)
+EPECIStatus peci_WrEndPointMmio(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
+                                uint8_t u8Device, uint8_t u8Fcn, uint8_t u8Bar,
+                                uint8_t u8AddrType, uint64_t u64Offset,
+                                uint8_t u8DataLen, uint64_t u64DataVal,
+                                uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
@@ -1208,9 +1200,9 @@ EPECIStatus peci_WrEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret = peci_WrEndPointConfigMmio_seq(target, u8Seg, u8Bus, u8Device, u8Fcn,
-                                        u8Bar, u8AddrType, u64Offset, u8DataLen,
-                                        u64DataVal, peci_fd, cc);
+    ret = peci_WrEndPointMmio_seq(target, u8Seg, u8Bus, u8Device, u8Fcn, u8Bar,
+                                  u8AddrType, u64Offset, u8DataLen, u64DataVal,
+                                  peci_fd, cc);
     peci_Close(peci_fd);
     return ret;
 }
@@ -1219,10 +1211,12 @@ EPECIStatus peci_WrEndPointConfigMmio(uint8_t target, uint8_t u8Seg,
  * This function allows sequential WrEndPointConfig to PCI MMIO with the
  * provided peci file descriptor.
  *------------------------------------------------------------------------*/
-EPECIStatus peci_WrEndPointConfigMmio_seq(
-    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
-    uint8_t u8Fcn, uint8_t u8Bar, uint8_t u8AddrType, uint64_t u64Offset,
-    uint8_t u8DataLen, uint64_t u64DataVal, int peci_fd, uint8_t* cc)
+EPECIStatus peci_WrEndPointMmio_seq(uint8_t target, uint8_t u8Seg,
+                                    uint8_t u8Bus, uint8_t u8Device,
+                                    uint8_t u8Fcn, uint8_t u8Bar,
+                                    uint8_t u8AddrType, uint64_t u64Offset,
+                                    uint8_t u8DataLen, uint64_t u64DataVal,
+                                    int peci_fd, uint8_t* cc)
 {
     struct peci_wr_end_pt_cfg_msg cmd = {};
     EPECIStatus ret = PECI_CC_SUCCESS;
@@ -1268,7 +1262,7 @@ EPECIStatus peci_WrEndPointConfigMmio_seq(
 EPECIStatus peci_CrashDump_Discovery(uint8_t target, uint8_t subopcode,
                                      uint8_t param0, uint16_t param1,
                                      uint8_t param2, uint8_t u8ReadLen,
-                                     uint8_t* pData, uint8_t* cc)
+                                     void* pData, uint8_t* cc)
 {
     int peci_fd = -1;
     struct peci_crashdump_disc_msg cmd = {};
@@ -1329,8 +1323,7 @@ EPECIStatus peci_CrashDump_Discovery(uint8_t target, uint8_t subopcode,
  *------------------------------------------------------------------------*/
 EPECIStatus peci_CrashDump_GetFrame(uint8_t target, uint16_t param0,
                                     uint16_t param1, uint16_t param2,
-                                    uint8_t u8ReadLen, uint8_t* pData,
-                                    uint8_t* cc)
+                                    uint8_t u8ReadLen, void* pData, uint8_t* cc)
 {
     int peci_fd = -1;
     struct peci_crashdump_get_frame_msg cmd = {};
@@ -1389,8 +1382,7 @@ EPECIStatus peci_CrashDump_GetFrame(uint8_t target, uint16_t param0,
  *  This function provides raw PECI command access
  *------------------------------------------------------------------------*/
 EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
-                     const uint32_t cmdSize, uint8_t* pRawResp,
-                     uint32_t respSize)
+                     const uint32_t cmdSize, void* pRawResp, uint32_t respSize)
 {
     int peci_fd = -1;
     struct peci_xfer_msg cmd = {};
@@ -1468,9 +1460,8 @@ EPECIStatus peci_GetCPUID(const uint8_t clientAddr, CPUModel* cpuModel,
         return PECI_CC_CPU_NOT_PRESENT;
     }
 
-    ret =
-        peci_RdPkgConfig(clientAddr, PECI_MBX_INDEX_CPU_ID, PECI_PKG_ID_CPU_ID,
-                         sizeof(uint32_t), (uint8_t*)&cpuid, cc);
+    ret = peci_RdPkgConfig(clientAddr, PECI_MBX_INDEX_CPU_ID,
+                           PECI_PKG_ID_CPU_ID, sizeof(cpuid), &cpuid, cc);
 
     // Separate out the model and stepping (bits 3:0) from the CPUID
     *cpuModel = cpuid & 0xFFFFFFF0;
