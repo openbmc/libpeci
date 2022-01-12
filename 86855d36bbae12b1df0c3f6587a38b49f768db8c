@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "223d8fae_007f2b50",
+        "filename": "dbus_raw_peci.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-01-12T21:43:04Z",
+      "side": 1,
+      "message": "I don\u0027t expect to need anything longer than 23s.  Under normal conditions 23s allows thousands of commands to handled.  In the future, if this limit becomes an issue, we will need to define something like you have suggested.",
+      "parentUuid": "c791a623_32d118ec",
+      "revId": "86855d36bbae12b1df0c3f6587a38b49f768db8c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e57c1b0_c7c7d4a6",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-12T00:47:17Z",
       "side": 1,
       "message": "do we need to call peci_SetDevName(NULL) here?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 76
+      },
+      "revId": "86855d36bbae12b1df0c3f6587a38b49f768db8c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e98de4d_9e406ebd",
+        "filename": "dbus_raw_peci.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-01-12T21:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e57c1b0_c7c7d4a6",
       "range": {
         "startLine": 67,
         "startChar": 0,
