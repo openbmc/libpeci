@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c791a623_32d118ec",
+        "filename": "dbus_raw_peci.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000163
+      },
+      "writtenOn": "2022-01-12T00:47:17Z",
+      "side": 1,
+      "message": "Will there be times when something longer than 23s needs to be executed? What do we do there? I am fine with this for now, but we may need to have an extended response mechanism like redfish has for jobs. So we can kick off the long-running task and collect its response later.",
+      "revId": "86855d36bbae12b1df0c3f6587a38b49f768db8c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e57c1b0_c7c7d4a6",
+        "filename": "dbus_raw_peci.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000163
+      },
+      "writtenOn": "2022-01-12T00:47:17Z",
+      "side": 1,
+      "message": "do we need to call peci_SetDevName(NULL) here?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 76
+      },
+      "revId": "86855d36bbae12b1df0c3f6587a38b49f768db8c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
