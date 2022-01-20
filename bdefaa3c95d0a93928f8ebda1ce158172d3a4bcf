@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51aa48bf_09898af8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-01-20T20:17:39Z",
+      "side": 1,
+      "message": "After the new driver is accepted into the kernel, we will update libpeci to support the new driver API.\n\nMy understanding is the command-specific ioctl interface will be replaced with more of a raw interface, and libpeci will be responsible for encoding the PECI command instead of populating the struct for the ioctl.  I haven\u0027t kept up on the latest driver status, though so I may be wrong.",
+      "parentUuid": "f556309e_5b3fd3f6",
+      "revId": "bdefaa3c95d0a93928f8ebda1ce158172d3a4bcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35222219_065f7383",
         "filename": "dbus_raw_peci.cpp",
         "patchSetId": 3
