@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f556309e_5b3fd3f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000733
+      },
+      "writtenOn": "2022-01-20T20:08:47Z",
+      "side": 1,
+      "message": "What are the plans for the userspace PECI code w.r.t. Iwona\u0027s recent work on the kernel patches?  AFAIK the new version of the driver doesn\u0027t provide /dev/peci devices or any other mechanism for userspace to do raw PECI transfers.",
+      "revId": "bdefaa3c95d0a93928f8ebda1ce158172d3a4bcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35222219_065f7383",
         "filename": "dbus_raw_peci.cpp",
         "patchSetId": 3
