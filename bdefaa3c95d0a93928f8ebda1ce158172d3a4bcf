@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a47451fc_3c4e2089",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-01-20T22:38:00Z",
+      "side": 1,
+      "message": "Ahh, that\u0027s right.  I think what is currently in review is just a part of the PECI driver (adapter?).  After that merges, I think there is still more work to do to get to the same functionality that we have today.\n\nUserspace PECI access is required and used by many applications today, so we\u0027ll have to enable that in some way before we can adopt the new driver.",
+      "parentUuid": "6f370a10_e18e01a5",
+      "revId": "bdefaa3c95d0a93928f8ebda1ce158172d3a4bcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35222219_065f7383",
         "filename": "dbus_raw_peci.cpp",
         "patchSetId": 3
