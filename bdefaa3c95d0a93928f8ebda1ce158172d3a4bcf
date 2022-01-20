@@ -22,6 +22,30 @@
       },
       "revId": "bdefaa3c95d0a93928f8ebda1ce158172d3a4bcf",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8adc4dd3_b6b9ed15",
+        "filename": "dbus_raw_peci.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-01-20T18:12:20Z",
+      "side": 1,
+      "message": "Not in this case.  The open/close is handled by the library.  peci_lock, which doesn\u0027t really work anymore, was added for cases in older systems when multiple PECI commands needed to be sent without interruption which we don\u0027t need for this case.",
+      "parentUuid": "35222219_065f7383",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 24
+      },
+      "revId": "bdefaa3c95d0a93928f8ebda1ce158172d3a4bcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
