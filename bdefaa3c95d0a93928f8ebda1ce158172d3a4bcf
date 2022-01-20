@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f370a10_e18e01a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000733
+      },
+      "writtenOn": "2022-01-20T22:30:18Z",
+      "side": 1,
+      "message": "My understanding of the new driver is that it doesn\u0027t provide any peci-specific userspace interface at all (just hwmon sysfs files).  I don\u0027t know the details offhand about what necessitates userspace having access to lower-level operations (pings, raw send/receive); is that something we could get by without?",
+      "parentUuid": "51aa48bf_09898af8",
+      "revId": "bdefaa3c95d0a93928f8ebda1ce158172d3a4bcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35222219_065f7383",
         "filename": "dbus_raw_peci.cpp",
         "patchSetId": 3
