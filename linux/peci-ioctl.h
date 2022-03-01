@@ -33,8 +33,8 @@
 #define PECI_DEV_CC_RETRY_CHECK_MASK			0xf0
 
 #define PECI_DEV_RETRY_TIMEOUT				msecs_to_jiffies(700)
-#define PECI_DEV_RETRY_INTERVAL_MIN_MSEC		1
-#define PECI_DEV_RETRY_INTERVAL_MAX_MSEC		128
+#define PECI_DEV_RETRY_INTERVAL_MIN_USEC		100
+#define PECI_DEV_RETRY_INTERVAL_MAX_USEC		(128 * 1000)
 #define PECI_DEV_RETRY_BIT				0x01
 
 /**
@@ -183,7 +183,7 @@ struct peci_rd_pkg_cfg_msg {
 #define PECI_MBX_INDEX_WAKE_MODE_BIT		5  /* "Wake on PECI" Mode bit */
 #define PECI_MBX_INDEX_EPI			6  /* Efficient Performance Indication */
 #define PECI_MBX_INDEX_PKG_RAPL_PERF		8  /* Pkg RAPL Performance Status Read */
-#define PECI_MBX_INDEX_PER_CORE_DTS_TEMP	9  /* Per Core DTS Temperature Read */
+#define PECI_MBX_INDEX_MODULE_TEMP		9  /* Module Temperature Read */
 #define PECI_MBX_INDEX_DTS_MARGIN		10 /* DTS thermal margin */
 #define PECI_MBX_INDEX_SKT_PWR_THRTL_DUR	11 /* Socket Power Throttled Duration */
 #define PECI_MBX_INDEX_CFG_TDP_CONTROL		12 /* TDP Config Control */
