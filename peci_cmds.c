@@ -33,8 +33,8 @@ extern EPECIStatus peci_GetDIB(uint8_t target, uint64_t* dib);
 void Usage(char* progname)
 {
     printf("Usage:\n");
-    printf("%s [-h] [-v] [-a <addr>] [-s <size>] [-l <count>] <command> "
-           "[parameters]\n",
+    printf("%s [-h] [-v] [-a <addr>] [-i <domain id>] [-s <size>] [-l <count>] "
+           "<command> [parameters]\n",
            progname);
     printf("Options:\n");
     printf("\t%-12s%s\n", "-h", "Display this help information");
@@ -47,6 +47,8 @@ void Usage(char* progname)
     printf("\t%-12s%s\n", "-a <addr>",
            "Address of the target. Accepted values are 48-55 (0x30-0x37). "
            "Default is 48 (0x30)");
+    printf("\t%-12s%s\n", "-i <domain id>",
+           "Domain ID of the target. Accepted values are 0-127. Default is 0");
     printf("\t%-12s%s\n", "-s <size>",
            "Size of data to read or write in bytes. Accepted values are 1, 2, "
            "4, 8, and 16. Default is 4");
@@ -101,6 +103,7 @@ int main(int argc, char* argv[])
     char* cmd = NULL;
     EPECIStatus ret;
     uint8_t address = 0x30; // use default address of 48d
+    uint8_t domainId = 0;   // use default domain ID of 0
     uint8_t u8Size = 4;     // default to a DWORD
     uint32_t u32PciReadVal = 0;
     uint8_t u8Seg = 0;
@@ -131,7 +134,7 @@ int main(int argc, char* argv[])
     //
     // Parse arguments.
     //
-    while (-1 != (c = getopt(argc, argv, "hvl:a:s:d:")))
+    while (-1 != (c = getopt(argc, argv, "hvl:a:i:s:d:")))
     {
         switch (c)
         {
@@ -167,6 +170,16 @@ int main(int argc, char* argv[])
                     goto ErrorExit;
                 }
 
+                break;
+
+            case 'i':
+                if (optarg != NULL)
+                    domainId = (uint8_t)strtoul(optarg, NULL, 0);
+                if (domainId >= 128) // Domain ID is only 7 bits
+                {
+                    printf("ERROR: Invalid domain ID \"%d\"\n", domainId);
+                    goto ErrorExit;
+                }
                 break;
 
             case 's':
@@ -307,8 +320,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_RdPkgConfig(address, u8PkgIndex, u16PkgParam, u8Size,
-                                   (uint8_t*)&u32PkgValue, &cc);
+            ret =
+                peci_RdPkgConfig_dom(address, domainId, u8PkgIndex, u16PkgParam,
+                                     u8Size, (uint8_t*)&u32PkgValue, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -352,8 +366,8 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_WrPkgConfig(address, u8PkgIndex, u16PkgParam,
-                                   u32PkgValue, u8Size, &cc);
+            ret = peci_WrPkgConfig_dom(address, domainId, u8PkgIndex,
+                                       u16PkgParam, u32PkgValue, u8Size, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -391,8 +405,8 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret =
-                peci_RdIAMSR(address, u8MsrThread, u16MsrAddr, &u64MsrVal, &cc);
+            ret = peci_RdIAMSR_dom(address, domainId, u8MsrThread, u16MsrAddr,
+                                   &u64MsrVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -443,8 +457,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_RdPCIConfig(address, u8PciBus, u8PciDev, u8PciFunc,
-                                   u16PciReg, (uint8_t*)&u32PciReadVal, &cc);
+            ret = peci_RdPCIConfig_dom(address, domainId, u8PciBus, u8PciDev,
+                                       u8PciFunc, u16PciReg,
+                                       (uint8_t*)&u32PciReadVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -495,9 +510,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_RdPCIConfigLocal(address, u8PciBus, u8PciDev, u8PciFunc,
-                                        u16PciReg, u8Size,
-                                        (uint8_t*)&u32PciReadVal, &cc);
+            ret = peci_RdPCIConfigLocal_dom(
+                address, domainId, u8PciBus, u8PciDev, u8PciFunc, u16PciReg,
+                u8Size, (uint8_t*)&u32PciReadVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -550,8 +565,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_WrPCIConfigLocal(address, u8PciBus, u8PciDev, u8PciFunc,
-                                        u16PciReg, u8Size, u32PciWriteVal, &cc);
+            ret = peci_WrPCIConfigLocal_dom(address, domainId, u8PciBus,
+                                            u8PciDev, u8PciFunc, u16PciReg,
+                                            u8Size, u32PciWriteVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -594,9 +610,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_RdEndPointConfigPciLocal(
-                address, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u16PciReg,
-                u8Size, (uint8_t*)&u32PciReadVal, &cc);
+            ret = peci_RdEndPointConfigPciLocal_dom(
+                address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
+                u16PciReg, u8Size, (uint8_t*)&u32PciReadVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -646,9 +662,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_WrEndPointPCIConfigLocal(address, u8Seg, u8PciBus,
-                                                u8PciDev, u8PciFunc, u16PciReg,
-                                                u8Size, u32PciWriteVal, &cc);
+            ret = peci_WrEndPointPCIConfigLocal_dom(
+                address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
+                u16PciReg, u8Size, u32PciWriteVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -689,9 +705,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_RdEndPointConfigPci(address, u8Seg, u8PciBus, u8PciDev,
-                                           u8PciFunc, u16PciReg, u8Size,
-                                           (uint8_t*)&u32PciReadVal, &cc);
+            ret = peci_RdEndPointConfigPci_dom(
+                address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
+                u16PciReg, u8Size, (uint8_t*)&u32PciReadVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -740,9 +756,9 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_WrEndPointPCIConfig(address, u8Seg, u8PciBus, u8PciDev,
-                                           u8PciFunc, u16PciReg, u8Size,
-                                           u32PciWriteVal, &cc);
+            ret = peci_WrEndPointPCIConfig_dom(
+                address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
+                u16PciReg, u8Size, u32PciWriteVal, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -787,8 +803,8 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_RdEndPointConfigMmio(
-                address, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
+            ret = peci_RdEndPointConfigMmio_dom(
+                address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
                 u8AddrType, u64Offset, u8Size, (uint8_t*)&u32PciReadVal, &cc);
             ccCounts[cc]++;
 
@@ -841,8 +857,8 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
-            ret = peci_WrEndPointConfigMmio(
-                address, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
+            ret = peci_WrEndPointConfigMmio_dom(
+                address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
                 u8AddrType, u64Offset, u8Size, u64MmioWriteVal, &cc);
             ccCounts[cc]++;
 
