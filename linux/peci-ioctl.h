@@ -161,6 +161,7 @@ struct peci_get_temp_msg {
  * @rx_len: number of data to be read in bytes
  * @cc: completion code
  * @pkg_config: package config data to be read
+ * @domain_id: domain ID of the client
  *
  * The RdPkgConfig() command provides read access to the Package Configuration
  * Space (PCS) within the processor, including various power and thermal
@@ -240,6 +241,7 @@ struct peci_rd_pkg_cfg_msg {
 	__u8	cc;
 	__u8	padding[2];
 	__u8	pkg_config[4];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -250,6 +252,7 @@ struct peci_rd_pkg_cfg_msg {
  * @tx_len: number of data to be written in bytes
  * @cc: completion code
  * @value: package config data to be written
+ * @domain_id: domain ID of the client
  *
  * The WrPkgConfig() command provides write access to the Package Configuration
  * Space (PCS) within the processor, including various power and thermal
@@ -272,6 +275,7 @@ struct peci_wr_pkg_cfg_msg {
 	__u8	cc;
 	__u8	padding[2];
 	__u32	value;
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -281,6 +285,7 @@ struct peci_wr_pkg_cfg_msg {
  * @address: address of MSR to read from
  * @cc: completion code
  * @value: data to be read
+ * @domain_id: domain ID of the client
  *
  * The RdIAMSR() PECI command provides read access to Model Specific Registers
  * (MSRs) defined in the processor's Intel Architecture (IA).
@@ -296,6 +301,7 @@ struct peci_rd_ia_msr_msg {
 	__u8	cc;
 	__u8	padding[3];
 	__u64	value;
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -306,6 +312,7 @@ struct peci_rd_ia_msr_msg {
  * @tx_len: number of data to be written in bytes
  * @cc: completion code
  * @value: data to be written
+ * @domain_id: domain ID of the client
  *
  * The WrIAMSR() PECI command provides write access to Model Specific Registers
  * (MSRs) defined in the processor's Intel Architecture (IA).
@@ -320,6 +327,7 @@ struct peci_wr_ia_msr_msg {
 	__u8	cc;
 	__u8	padding[2];
 	__u64	value;
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -329,6 +337,7 @@ struct peci_wr_ia_msr_msg {
  * @address: address of MSR to read from
  * @cc: completion code
  * @value: data to be read
+ * @domain_id: domain ID of the client
  *
  * The RdIAMSREX() PECI command provides read access to Model Specific
  * Registers (MSRs) defined in the processor's Intel Architecture (IA).
@@ -348,6 +357,7 @@ struct peci_rd_ia_msrex_msg {
 	__u8	cc;
 	__u8	padding1;
 	__u64	value;
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -359,6 +369,7 @@ struct peci_rd_ia_msrex_msg {
  * @reg: specific register to read from
  * @cc: completion code
  * @pci_config: config data to be read
+ * @domain_id: domain ID of the client
  *
  * The RdPCIConfig() command provides sideband read access to the PCI
  * configuration space maintained in downstream devices external to the
@@ -387,6 +398,7 @@ struct peci_rd_pci_cfg_msg {
 	__u8	cc;
 	__u8	padding[1];
 	__u8	pci_config[4];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -399,6 +411,7 @@ struct peci_rd_pci_cfg_msg {
  * @tx_len: number of data to be written in bytes
  * @cc: completion code
  * @pci_config: config data to be written
+ * @domain_id: domain ID of the client
  *
  * The RdPCIConfig() command provides sideband write access to the PCI
  * configuration space maintained in downstream devices external to the
@@ -415,6 +428,7 @@ struct peci_wr_pci_cfg_msg {
 	__u8	tx_len;
 	__u8	cc;
 	__u8	pci_config[4];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -427,6 +441,7 @@ struct peci_wr_pci_cfg_msg {
  * @rx_len: number of data to be read in bytes
  * @cc: completion code
  * @pci_config: config data to be read
+ * @domain_id: domain ID of the client
  *
  * The RdPCIConfigLocal() command provides sideband read access to the PCI
  * configuration space that resides within the processor. This includes all
@@ -445,6 +460,7 @@ struct peci_rd_pci_cfg_local_msg {
 	__u8	rx_len;
 	__u8	cc;
 	__u8	pci_config[4];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /**
@@ -457,6 +473,7 @@ struct peci_rd_pci_cfg_local_msg {
  * @tx_len: number of data to be written in bytes
  * @cc: completion code
  * @value: config data to be written
+ * @domain_id: domain ID of the client
  *
  * The WrPCIConfigLocal() command provides sideband write access to the PCI
  * configuration space that resides within the processor. PECI originators can
@@ -475,6 +492,7 @@ struct peci_wr_pci_cfg_local_msg {
 	__u8	tx_len;
 	__u8	cc;
 	__u32	value;
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 struct peci_rd_end_pt_cfg_msg {
@@ -516,6 +534,7 @@ struct peci_rd_end_pt_cfg_msg {
 	__u8	cc;
 	__u8	padding[2];
 	__u8	data[8];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 struct peci_wr_end_pt_cfg_msg {
@@ -553,6 +572,7 @@ struct peci_wr_end_pt_cfg_msg {
 	__u8	cc;
 	__u8	padding[2];
 	__u64	value;
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 /* Crashdump Agent */
@@ -579,6 +599,7 @@ struct peci_crashdump_disc_msg {
 	__u8	param2;
 	__u8	rx_len;
 	__u8	data[8];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 struct peci_crashdump_get_frame_msg {
@@ -601,6 +622,7 @@ struct peci_crashdump_get_frame_msg {
 	__u8	cc;
 	__u8	padding1[2];
 	__u8	data[16];
+	__u8	domain_id;
 } __attribute__((__packed__));
 
 #define PECI_IOC_BASE	0xb8
