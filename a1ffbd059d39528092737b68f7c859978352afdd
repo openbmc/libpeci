@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d45c05a_9ee7f86d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000733
+      },
+      "writtenOn": "2022-03-05T02:11:46Z",
+      "side": 1,
+      "message": "\"Latest\" as per what source?  The PECI driver in the upstream kernel doesn\u0027t have this header (or interface) at all, right?",
+      "revId": "a1ffbd059d39528092737b68f7c859978352afdd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
