@@ -16,6 +16,24 @@
       "message": "\"Latest\" as per what source?  The PECI driver in the upstream kernel doesn\u0027t have this header (or interface) at all, right?",
       "revId": "a1ffbd059d39528092737b68f7c859978352afdd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd2faa14_64a95575",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-03-07T15:10:25Z",
+      "side": 1,
+      "message": "That\u0027s correct.  libpeci interfaces with the old PECI driver that was removed from OpenBMC.  It is currently available on the Intel Linux fork, here: https://github.com/Intel-BMC/linux/blob/dev-5.15-intel/include/uapi/linux/peci-ioctl.h#L36.\n\nMy understanding is after the new PECI driver becomes available, we will begin to phase out libpeci as applications get converted to the new driver.",
+      "parentUuid": "3d45c05a_9ee7f86d",
+      "revId": "a1ffbd059d39528092737b68f7c859978352afdd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
