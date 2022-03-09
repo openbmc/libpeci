@@ -39,7 +39,7 @@ char* peci_device_list[2];
  *------------------------------------------------------------------------*/
 void peci_SetDevName(char* peci_dev)
 {
-    static char peci_name_new[DEV_NAME_SIZE] = {};
+    static char peci_name_new[DEV_NAME_SIZE] = {0};
 
     if (peci_dev)
     {
@@ -88,7 +88,7 @@ void peci_Unlock(int peci_fd)
  *------------------------------------------------------------------------*/
 EPECIStatus peci_Lock(int* peci_fd, int timeout_ms)
 {
-    struct timespec sRequest = {};
+    struct timespec sRequest = {0};
     sRequest.tv_sec = 0;
     sRequest.tv_nsec = PECI_TIMEOUT_RESOLUTION_MS * 1000 * 1000;
     int timeout_count = 0;
@@ -189,7 +189,7 @@ EPECIStatus FindBusNumber(uint8_t u8Bus, uint8_t u8Cpu, uint8_t* pu8BusValue)
     uint8_t u8Bus0 = 0;
     uint8_t u8Offset = 0;
     EPECIStatus ret = PECI_CC_SUCCESS;
-    uint8_t u8Reg[4] = {};
+    uint8_t u8Reg[4] = {0};
     uint8_t cc = 0;
 
     // First check for valid inputs
@@ -275,7 +275,7 @@ EPECIStatus peci_Ping(uint8_t target)
 EPECIStatus peci_Ping_seq(uint8_t target, int peci_fd)
 {
     EPECIStatus ret = PECI_CC_SUCCESS;
-    struct peci_ping_msg cmd = {};
+    struct peci_ping_msg cmd = {0};
 
     // The target address must be in the valid range
     if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
@@ -324,7 +324,7 @@ EPECIStatus peci_GetDIB(uint8_t target, uint64_t* dib)
  *------------------------------------------------------------------------*/
 EPECIStatus peci_GetDIB_seq(uint8_t target, uint64_t* dib, int peci_fd)
 {
-    struct peci_get_dib_msg cmd = {};
+    struct peci_get_dib_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
     cmd.addr = target;
 
@@ -356,7 +356,7 @@ EPECIStatus peci_GetDIB_seq(uint8_t target, uint64_t* dib, int peci_fd)
 EPECIStatus peci_GetTemp(uint8_t target, int16_t* temperature)
 {
     int peci_fd = -1;
-    struct peci_get_temp_msg cmd = {};
+    struct peci_get_temp_msg cmd = {0};
 
     if (temperature == NULL)
     {
@@ -430,7 +430,7 @@ EPECIStatus peci_RdPkgConfig_seq(uint8_t target, uint8_t u8Index,
                                  uint16_t u16Value, uint8_t u8ReadLen,
                                  uint8_t* pPkgConfig, int peci_fd, uint8_t* cc)
 {
-    struct peci_rd_pkg_cfg_msg cmd = {};
+    struct peci_rd_pkg_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pPkgConfig == NULL || cc == NULL)
@@ -511,7 +511,7 @@ EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
                                  uint16_t u16Param, uint32_t u32Value,
                                  uint8_t u8WriteLen, int peci_fd, uint8_t* cc)
 {
-    struct peci_wr_pkg_cfg_msg cmd = {};
+    struct peci_wr_pkg_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (cc == NULL)
@@ -551,7 +551,7 @@ EPECIStatus peci_RdIAMSR(uint8_t target, uint8_t threadID, uint16_t MSRAddress,
                          uint64_t* u64MsrVal, uint8_t* cc)
 {
     int peci_fd = -1;
-    struct peci_rd_ia_msr_msg cmd = {};
+    struct peci_rd_ia_msr_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (u64MsrVal == NULL || cc == NULL)
@@ -627,7 +627,7 @@ EPECIStatus peci_RdPCIConfig_seq(uint8_t target, uint8_t u8Bus,
                                  uint16_t u16Reg, uint8_t* pPCIData,
                                  int peci_fd, uint8_t* cc)
 {
-    struct peci_rd_pci_cfg_msg cmd = {};
+    struct peci_rd_pci_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pPCIData == NULL || cc == NULL)
@@ -707,7 +707,7 @@ EPECIStatus peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus,
                                       uint8_t* pPCIReg, int peci_fd,
                                       uint8_t* cc)
 {
-    struct peci_rd_pci_cfg_local_msg cmd = {};
+    struct peci_rd_pci_cfg_local_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pPCIReg == NULL || cc == NULL)
@@ -760,7 +760,7 @@ EPECIStatus peci_WrPCIConfigLocal(uint8_t target, uint8_t u8Bus,
                                   uint32_t DataVal, uint8_t* cc)
 {
     int peci_fd = -1;
-    struct peci_wr_pci_cfg_local_msg cmd = {};
+    struct peci_wr_pci_cfg_local_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (cc == NULL)
@@ -809,7 +809,7 @@ static EPECIStatus peci_RdEndPointConfigPciCommon(
     uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen,
     uint8_t* pPCIData, int peci_fd, uint8_t* cc)
 {
-    struct peci_rd_end_pt_cfg_msg cmd = {};
+    struct peci_rd_end_pt_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pPCIData == NULL || cc == NULL)
@@ -1033,7 +1033,7 @@ EPECIStatus peci_RdEndPointConfigMmio_seq(
     uint8_t u8Fcn, uint8_t u8Bar, uint8_t u8AddrType, uint64_t u64Offset,
     uint8_t u8ReadLen, uint8_t* pMmioData, int peci_fd, uint8_t* cc)
 {
-    struct peci_rd_end_pt_cfg_msg cmd = {};
+    struct peci_rd_end_pt_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pMmioData == NULL || cc == NULL)
@@ -1096,7 +1096,7 @@ EPECIStatus peci_WrEndPointConfig_seq(uint8_t target, uint8_t u8MsgType,
                                       uint32_t DataVal, int peci_fd,
                                       uint8_t* cc)
 {
-    struct peci_wr_end_pt_cfg_msg cmd = {};
+    struct peci_wr_end_pt_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (cc == NULL)
@@ -1224,7 +1224,7 @@ EPECIStatus peci_WrEndPointConfigMmio_seq(
     uint8_t u8Fcn, uint8_t u8Bar, uint8_t u8AddrType, uint64_t u64Offset,
     uint8_t u8DataLen, uint64_t u64DataVal, int peci_fd, uint8_t* cc)
 {
-    struct peci_wr_end_pt_cfg_msg cmd = {};
+    struct peci_wr_end_pt_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (cc == NULL)
@@ -1271,7 +1271,7 @@ EPECIStatus peci_CrashDump_Discovery(uint8_t target, uint8_t subopcode,
                                      uint8_t* pData, uint8_t* cc)
 {
     int peci_fd = -1;
-    struct peci_crashdump_disc_msg cmd = {};
+    struct peci_crashdump_disc_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pData == NULL || cc == NULL)
@@ -1333,7 +1333,7 @@ EPECIStatus peci_CrashDump_GetFrame(uint8_t target, uint16_t param0,
                                     uint8_t* cc)
 {
     int peci_fd = -1;
-    struct peci_crashdump_get_frame_msg cmd = {};
+    struct peci_crashdump_get_frame_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (pData == NULL || cc == NULL)
@@ -1393,9 +1393,9 @@ EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
                      uint32_t respSize)
 {
     int peci_fd = -1;
-    struct peci_xfer_msg cmd = {};
-    uint8_t u8TxBuf[PECI_BUFFER_SIZE] = {};
-    uint8_t u8RxBuf[PECI_BUFFER_SIZE] = {};
+    struct peci_xfer_msg cmd = {0};
+    uint8_t u8TxBuf[PECI_BUFFER_SIZE] = {0};
+    uint8_t u8RxBuf[PECI_BUFFER_SIZE] = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
     if (u8ReadLen && pRawResp == NULL)

@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
     bool verbose = false;
     bool looped = false;
     uint32_t loops = 1;
-    uint32_t ccCounts[CC_COUNT] = {};
+    uint32_t ccCounts[CC_COUNT] = {0};
 
     //
     // Parse arguments.
