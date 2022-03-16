@@ -1,0 +1,10 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+1: Arun Lal K M <arun.lal@intel.com>
+Code-Review+1: Sujoy Ray <sujoy.ray@intel.com>
+Code-Review+1: Kenny L.K. Ku <kenny.k.ku@intel.com>
+Code-Review+2: Jason Bills <jason.m.bills@linux.intel.com>
+Submitted-by: Jason Bills <jason.m.bills@linux.intel.com>
+Submitted-at: Wed, 16 Mar 2022 18:25:12 +0000
+Reviewed-on: https://gerrit.openbmc-project.xyz/c/openbmc/libpeci/+/51734
+Project: openbmc/libpeci
+Branch: refs/heads/master
