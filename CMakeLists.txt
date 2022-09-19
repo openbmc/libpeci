@@ -12,22 +12,21 @@ option(DBUS_RAW_PECI "Add the raw PECI D-Bus daemon to the build." OFF)
 set(
   CMAKE_C_FLAGS
   "${CMAKE_C_FLAGS} \
--Wall \
--Wextra \
--Wcast-align \
--Wunused \
--Wconversion \
--Wsign-conversion \
--Wnull-dereference \
--Wdouble-promotion \
--Wformat=2 \
--Wno-unused-parameter \
--Werror \
--Wduplicated-cond \
--Wduplicated-branches \
--Wlogical-op \
-"
-  )
+  -Wall \
+  -Wextra \
+  -Wcast-align \
+  -Wunused \
+  -Wconversion \
+  -Wsign-conversion \
+  -Wnull-dereference \
+  -Wdouble-promotion \
+  -Wformat=2 \
+  -Wno-unused-parameter \
+  -Werror \
+  -Wduplicated-cond \
+  -Wduplicated-branches \
+  -Wlogical-op \
+")
 
 install(TARGETS peci DESTINATION lib)
 install(FILES peci.h DESTINATION include)
@@ -42,6 +41,28 @@ install(TARGETS peci_cmds
         ARCHIVE DESTINATION lib/static)
 
 if(${DBUS_RAW_PECI})
+  set(
+    CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} \
+    -Wall \
+    -Wextra \
+    -Wcast-align \
+    -Wunused \
+    -Wconversion \
+    -Wsign-conversion \
+    -Wdouble-promotion \
+    -Wformat=2 \
+    -Wno-unused-parameter \
+    -Werror \
+    -Wduplicated-cond \
+    -Wduplicated-branches \
+    -Wlogical-op \
+    -Wno-psabi \
+    -fno-rtti \
+  ")
+  # This flag doesn't compile, but should be debuged in a future patchset
+  #-Wnull-dereference \
+
   add_executable(raw-peci dbus_raw_peci.cpp)
   add_dependencies(raw-peci peci)
 
@@ -53,6 +74,9 @@ if(${DBUS_RAW_PECI})
   add_definitions(-DBOOST_ALL_NO_LIB)
   add_definitions(-DBOOST_NO_RTTI)
   add_definitions(-DBOOST_NO_TYPEID)
+  add_definitions(-DBOOST_EXCEPTION_DISABLE)
+  add_definitions(-DBOOST_ASIO_DISABLE_THREADS)
+  add_definitions(-DBOOST_ASIO_NO_DEPRECATED)
 
   target_link_libraries(raw-peci peci -lsystemd sdbusplus)
 
