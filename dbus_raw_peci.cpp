@@ -15,13 +15,13 @@
 */
 #include <peci.h>
 
-#include <boost/asio/io_service.hpp>
+#include <boost/asio/io_context.hpp>
 #include <iostream>
 #include <sdbusplus/asio/object_server.hpp>
 
 int main()
 {
-    boost::asio::io_service io;
+    boost::asio::io_context io;
     std::shared_ptr<sdbusplus::asio::connection> conn;
     std::shared_ptr<sdbusplus::asio::object_server> server;
 
