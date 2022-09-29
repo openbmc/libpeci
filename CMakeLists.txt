@@ -3,6 +3,7 @@ project(libpeci)
 
 add_library(peci SHARED peci.c)
 
+set(CMAKE_CXX_STANDARD 20)
 set_property(TARGET peci PROPERTY C_STANDARD 99)
 target_include_directories(peci PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(peci PROPERTIES VERSION "1.0" SOVERSION "1")
