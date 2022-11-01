@@ -119,6 +119,7 @@ int main(int argc, char* argv[])
     uint8_t u8PkgIndex = 0;
     uint16_t u16PkgParam = 0;
     uint32_t u32PkgValue = 0;
+    uint64_t u64PkgValue = 0;
     uint8_t u8MsrThread = 0;
     uint16_t u16MsrAddr = 0;
     uint64_t u64MsrVal = 0;
@@ -322,7 +323,7 @@ int main(int argc, char* argv[])
         {
             ret =
                 peci_RdPkgConfig_dom(address, domainId, u8PkgIndex, u16PkgParam,
-                                     u8Size, (uint8_t*)&u32PkgValue, &cc);
+                                     u8Size, (uint8_t*)&u64PkgValue, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -334,8 +335,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
-                           u32PkgValue);
+                    printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2,
+                           u64PkgValue);
                 }
             }
         }

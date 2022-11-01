@@ -425,6 +425,12 @@ EPECIStatus peci_RdPkgConfig_dom(uint8_t target, uint8_t domainId,
         return PECI_CC_INVALID_REQ;
     }
 
+    // The Intel CPU EDS permits only dword or qword read accesses
+    if (u8ReadLen != 4 && u8ReadLen != 8)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     if (peci_Open(&peci_fd) != PECI_CC_SUCCESS)
     {
         return PECI_CC_DRIVER_ERR;
@@ -468,12 +474,6 @@ EPECIStatus peci_RdPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
 
     // The target address must be in the valid range
     if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
-    {
-        return PECI_CC_INVALID_REQ;
-    }
-
-    // Per the PECI spec, the write length must be a byte, word, or dword
-    if (u8ReadLen != 1 && u8ReadLen != 2 && u8ReadLen != 4)
     {
         return PECI_CC_INVALID_REQ;
     }
