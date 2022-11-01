@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     uint64_t u64MmioWriteVal = 0;
     uint8_t u8PkgIndex = 0;
     uint16_t u16PkgParam = 0;
-    uint32_t u32PkgValue = 0;
+    uint64_t u64PkgValue = 0;
     uint8_t u8MsrThread = 0;
     uint16_t u16MsrAddr = 0;
     uint64_t u64MsrVal = 0;
@@ -322,7 +322,7 @@ int main(int argc, char* argv[])
         {
             ret =
                 peci_RdPkgConfig_dom(address, domainId, u8PkgIndex, u16PkgParam,
-                                     u8Size, (uint8_t*)&u32PkgValue, &cc);
+                                     u8Size, (uint8_t*)&u64PkgValue, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -334,8 +334,7 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
-                           u32PkgValue);
+                    printf("   cc:0x%02x 0x%" PRIx64 "\n", cc, u64PkgValue);
                 }
             }
         }
@@ -350,7 +349,7 @@ int main(int argc, char* argv[])
         switch (argc - optind)
         {
             case 3:
-                u32PkgValue = (uint32_t)strtoul(argv[--index], NULL, 0);
+                u64PkgValue = strtoull(argv[--index], NULL, 0);
                 u16PkgParam = (uint16_t)strtoul(argv[--index], NULL, 0);
                 u8PkgIndex = (uint8_t)strtoul(argv[--index], NULL, 0);
                 break;
@@ -361,13 +360,14 @@ int main(int argc, char* argv[])
         }
         if (verbose)
         {
-            printf("Pkg Write of Index %02x Param %04x: 0x%0*x\n", u8PkgIndex,
-                   u16PkgParam, u8Size * 2, u32PkgValue);
+            printf("Pkg Write of Index %02x Param %04x: 0x%" PRIx64 "\n",
+                   u8PkgIndex, u16PkgParam, u64PkgValue);
         }
         while (loops--)
         {
-            ret = peci_WrPkgConfig_dom(address, domainId, u8PkgIndex,
-                                       u16PkgParam, u32PkgValue, u8Size, &cc);
+            ret =
+                peci_WrPkgConfig_dom(address, domainId, u8PkgIndex, u16PkgParam,
+                                     (uint8_t*)&u64PkgValue, u8Size, &cc);
             ccCounts[cc]++;
 
             if (verbose || loops == 0)

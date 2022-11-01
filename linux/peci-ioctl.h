@@ -170,8 +170,9 @@ struct peci_get_temp_msg {
  * DIMM temperatures and so on.
  */
 struct peci_rd_pkg_cfg_msg {
-#define PECI_RDPKGCFG_WRITE_LEN			5
+#define PECI_RDPKGCFG_WRITE_LEN		5
 #define PECI_RDPKGCFG_READ_LEN_BASE		1
+#define PECI_RDPKGCFG_PKGCFG_LEN		8
 #define PECI_RDPKGCFG_CMD			0xa1
 
 	__u8	addr;
@@ -240,7 +241,7 @@ struct peci_rd_pkg_cfg_msg {
 	__u8	rx_len;
 	__u8	cc;
 	__u8	padding[2];
-	__u8	pkg_config[4];
+	__u8	pkg_config[PECI_RDPKGCFG_PKGCFG_LEN];
 	__u8	domain_id;
 	__u8	padding1[3];
 } __attribute__((__packed__));
@@ -263,6 +264,7 @@ struct peci_rd_pkg_cfg_msg {
  */
 struct peci_wr_pkg_cfg_msg {
 #define PECI_WRPKGCFG_WRITE_LEN_BASE	6
+#define PECI_WRPKGCFG_MAX_WRITE_LEN	8
 #define PECI_WRPKGCFG_READ_LEN		1
 #define PECI_WRPKGCFG_CMD		0xa5
 
@@ -275,7 +277,7 @@ struct peci_wr_pkg_cfg_msg {
 	__u8	tx_len;
 	__u8	cc;
 	__u8	padding[2];
-	__u32	value;
+	__u8	pkg_data[PECI_WRPKGCFG_MAX_WRITE_LEN];
 	__u8	domain_id;
 	__u8	padding1[3];
 } __attribute__((__packed__));
