@@ -472,8 +472,8 @@ EPECIStatus peci_RdPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
         return PECI_CC_INVALID_REQ;
     }
 
-    // Per the PECI spec, the write length must be a byte, word, or dword
-    if (u8ReadLen != 1 && u8ReadLen != 2 && u8ReadLen != 4)
+    // Support PECI 4.0 read lengths
+    if (u8ReadLen != 1 && u8ReadLen != 2 && u8ReadLen != 4 && u8ReadLen != 8)
     {
         return PECI_CC_INVALID_REQ;
     }
