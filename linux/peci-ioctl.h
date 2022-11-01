@@ -240,7 +240,7 @@ struct peci_rd_pkg_cfg_msg {
 	__u8	rx_len;
 	__u8	cc;
 	__u8	padding[2];
-	__u8	pkg_config[4];
+	__u8	pkg_config[8];
 	__u8	domain_id;
 	__u8	padding1[3];
 } __attribute__((__packed__));
