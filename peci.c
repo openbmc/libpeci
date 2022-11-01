@@ -472,8 +472,8 @@ EPECIStatus peci_RdPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
         return PECI_CC_INVALID_REQ;
     }
 
-    // Per the PECI spec, the write length must be a byte, word, or dword
-    if (u8ReadLen != 1 && u8ReadLen != 2 && u8ReadLen != 4)
+    // Support PECI 4.0 read lengths
+    if (u8ReadLen != 1 && u8ReadLen != 2 && u8ReadLen != 4 && u8ReadLen != 8)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -505,10 +505,10 @@ EPECIStatus peci_RdPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
  * space within the processor
  *------------------------------------------------------------------------*/
 EPECIStatus peci_WrPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Param,
-                             uint32_t u32Value, uint8_t u8WriteLen, uint8_t* cc)
+                             uint8_t* pPkgData, uint8_t u8WriteLen, uint8_t* cc)
 {
     //  Default to domain ID 0
-    return peci_WrPkgConfig_dom(target, 0, u8Index, u16Param, u32Value,
+    return peci_WrPkgConfig_dom(target, 0, u8Index, u16Param, pPkgData,
                                 u8WriteLen, cc);
 }
 
@@ -518,13 +518,13 @@ EPECIStatus peci_WrPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Param,
  *------------------------------------------------------------------------*/
 EPECIStatus peci_WrPkgConfig_dom(uint8_t target, uint8_t domainId,
                                  uint8_t u8Index, uint16_t u16Param,
-                                 uint32_t u32Value, uint8_t u8WriteLen,
+                                 uint8_t* pPkgData, uint8_t u8WriteLen,
                                  uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (cc == NULL)
+    if (cc == NULL || pPkgData == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -540,7 +540,7 @@ EPECIStatus peci_WrPkgConfig_dom(uint8_t target, uint8_t domainId,
         return PECI_CC_DRIVER_ERR;
     }
     ret = peci_WrPkgConfig_seq_dom(target, domainId, u8Index, u16Param,
-                                   u32Value, u8WriteLen, peci_fd, cc);
+                                   pPkgData, u8WriteLen, peci_fd, cc);
 
     peci_Close(peci_fd);
     return ret;
@@ -551,11 +551,11 @@ EPECIStatus peci_WrPkgConfig_dom(uint8_t target, uint8_t domainId,
  * peci file descriptor.
  *------------------------------------------------------------------------*/
 EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
-                                 uint16_t u16Param, uint32_t u32Value,
+                                 uint16_t u16Param, uint8_t* pPkgData,
                                  uint8_t u8WriteLen, int peci_fd, uint8_t* cc)
 {
     //  Default to domain ID 0
-    return peci_WrPkgConfig_seq_dom(target, 0, u8Index, u16Param, u32Value,
+    return peci_WrPkgConfig_seq_dom(target, 0, u8Index, u16Param, pPkgData,
                                     u8WriteLen, peci_fd, cc);
 }
 
@@ -565,13 +565,13 @@ EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
  *------------------------------------------------------------------------*/
 EPECIStatus peci_WrPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
                                      uint8_t u8Index, uint16_t u16Param,
-                                     uint32_t u32Value, uint8_t u8WriteLen,
+                                     uint8_t* pPkgData, uint8_t u8WriteLen,
                                      int peci_fd, uint8_t* cc)
 {
     struct peci_wr_pkg_cfg_msg cmd = {0};
     EPECIStatus ret = PECI_CC_SUCCESS;
 
-    if (cc == NULL)
+    if (cc == NULL || pPkgData == NULL)
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -583,7 +583,8 @@ EPECIStatus peci_WrPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
     }
 
     // Per the PECI spec, the write length must be a byte, word, or dword
-    if ((u8WriteLen != 1) && (u8WriteLen != 2) && (u8WriteLen != 4))
+    if ((u8WriteLen != 1) && (u8WriteLen != 2) && (u8WriteLen != 4) &&
+        (u8WriteLen != 8))
     {
         return PECI_CC_INVALID_REQ;
     }
@@ -592,7 +593,7 @@ EPECIStatus peci_WrPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
     cmd.index = u8Index;  // RdPkgConfig index
     cmd.param = u16Param; // parameter value
     cmd.tx_len = u8WriteLen;
-    cmd.value = u32Value;
+    memcpy(cmd.pkg_data, pPkgData, u8WriteLen);
     cmd.domain_id = domainId;
 
     ret = HW_peci_issue_cmd(PECI_IOC_WR_PKG_CFG, (char*)&cmd, peci_fd);

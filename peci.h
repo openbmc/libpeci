@@ -126,26 +126,26 @@ EPECIStatus peci_RdPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
 
 // Provides write access to the package configuration space within the processor
 EPECIStatus peci_WrPkgConfig(uint8_t target, uint8_t u8Index, uint16_t u16Param,
-                             uint32_t u32Value, uint8_t u8WriteLen,
+                             uint8_t* pPkgData, uint8_t u8WriteLen,
                              uint8_t* cc);
 
 // Provides write access to the package configuration space within the processor
 // in the specified domain
 EPECIStatus peci_WrPkgConfig_dom(uint8_t target, uint8_t domainId,
                                  uint8_t u8Index, uint16_t u16Param,
-                                 uint32_t u32Value, uint8_t u8WriteLen,
+                                 uint8_t* pPkgData, uint8_t u8WriteLen,
                                  uint8_t* cc);
 
 // Allows sequential WrPkgConfig with the provided peci file descriptor
 EPECIStatus peci_WrPkgConfig_seq(uint8_t target, uint8_t u8Index,
-                                 uint16_t u16Param, uint32_t u32Value,
+                                 uint16_t u16Param, uint8_t* pPkgData,
                                  uint8_t u8WriteLen, int peci_fd, uint8_t* cc);
 
 // Allows sequential WrPkgConfig with the provided peci file descriptor in the
 // specified domain
 EPECIStatus peci_WrPkgConfig_seq_dom(uint8_t target, uint8_t domainId,
                                      uint8_t u8Index, uint16_t u16Param,
-                                     uint32_t u32Value, uint8_t u8WriteLen,
+                                     uint8_t* pPkgData, uint8_t u8WriteLen,
                                      int peci_fd, uint8_t* cc);
 
 // Provides read access to Model Specific Registers
