@@ -16,6 +16,24 @@
       "message": "I think we should keep this check where it was in the _seq_ function.  _seq_ can be directly called from an outside application, and this function calls _seq_, so I think that\u0027s the common place to verify the length.",
       "revId": "33a4655c13c613f83a1ed9b3d6f7488d8550921b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "147490d0_d90f1648",
+        "filename": "peci.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2022-11-03T22:20:50Z",
+      "side": 1,
+      "message": "My thought here was to avoid performing an fopen on the peci device when you already know the command is invalid.\nIt had not occurred to me that this is a lib, and therefore someone else may perform a call of this function directly.",
+      "parentUuid": "f80d78a4_c59710fb",
+      "revId": "33a4655c13c613f83a1ed9b3d6f7488d8550921b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
