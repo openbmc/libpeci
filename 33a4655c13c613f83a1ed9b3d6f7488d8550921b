@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f80d78a4_c59710fb",
+        "filename": "peci.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2022-11-03T21:46:30Z",
+      "side": 1,
+      "message": "I think we should keep this check where it was in the _seq_ function.  _seq_ can be directly called from an outside application, and this function calls _seq_, so I think that\u0027s the common place to verify the length.",
+      "revId": "33a4655c13c613f83a1ed9b3d6f7488d8550921b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
