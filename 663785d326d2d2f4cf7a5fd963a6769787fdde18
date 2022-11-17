@@ -39,6 +39,30 @@
       },
       "revId": "663785d326d2d2f4cf7a5fd963a6769787fdde18",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0762a3da_568b4f86",
+        "filename": "linux/peci-ioctl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2022-11-17T21:52:34Z",
+      "side": 1,
+      "message": "There is, in fact, a mismatch to the kernel code. I have updated the PECI code in the forked Intel kernel.",
+      "parentUuid": "236f2c80_37117ea8",
+      "range": {
+        "startLine": 243,
+        "startChar": 1,
+        "endLine": 243,
+        "endChar": 20
+      },
+      "revId": "663785d326d2d2f4cf7a5fd963a6769787fdde18",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

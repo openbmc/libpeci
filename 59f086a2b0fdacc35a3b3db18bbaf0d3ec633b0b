@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec81da4_e9a430c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000278
+      },
+      "writtenOn": "2022-11-17T21:52:34Z",
+      "side": 1,
+      "message": "Updated the WrPkgConfig code as well.",
+      "revId": "59f086a2b0fdacc35a3b3db18bbaf0d3ec633b0b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
