@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.6)
 project(libpeci)
 
 add_library(peci SHARED peci.c)
+configure_file(peci.pc.in peci.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/peci.pc DESTINATION lib/pkgconfig)
 
 set(CMAKE_CXX_STANDARD 20)
 set_property(TARGET peci PROPERTY C_STANDARD 99)
@@ -90,3 +92,4 @@ if(${DBUS_RAW_PECI})
 
   install(FILES ${SERVICE_FILES} DESTINATION /lib/systemd/system/)
 endif()
+
