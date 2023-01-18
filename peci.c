@@ -116,6 +116,7 @@ EPECIStatus peci_Lock(int* peci_fd, int timeout_ms)
                 nanosleep(&sRequest, NULL);
                 *peci_fd = open(peci_device, O_RDWR | O_CLOEXEC);
             }
+            break;
         default:
             while (-1 == *peci_fd && timeout_count < timeout_ms)
             {
