@@ -1,0 +1,8 @@
+Code-Review+2: Jason Bills <jason.m.bills@linux.intel.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+2: AppaRao Puli <apparao.puli@intel.com>
+Submitted-by: AppaRao Puli <apparao.puli@intel.com>
+Submitted-at: Wed, 18 Jan 2023 17:06:17 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/libpeci/+/60360
+Project: openbmc/libpeci
+Branch: refs/heads/master
