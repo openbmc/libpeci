@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 #ifndef ABS
 #define ABS(_v_) (((_v_) > 0) ? (_v_) : -(_v_))
@@ -30,16 +31,33 @@
 
 extern EPECIStatus peci_GetDIB(uint8_t target, uint64_t* dib);
 
+double getTimeDifference(const struct timespec begin)
+{
+    double timeDiff = 0.0;
+    struct timespec end;
+    long seconds = 0;
+    long nanoseconds = 0;
+
+    clock_gettime(CLOCK_REALTIME, &end);
+    seconds = end.tv_sec - begin.tv_sec;
+    nanoseconds = end.tv_nsec - begin.tv_nsec;
+    timeDiff = (double)seconds + (double)nanoseconds * 1e-9;
+
+    return timeDiff;
+}
+
 void Usage(char* progname)
 {
     printf("Usage:\n");
-    printf("%s [-h] [-v] [-a <addr>] [-i <domain id>] [-s <size>] [-l <count>] "
+    printf("%s [-h] [-v] [-t] [-a <addr>] [-i <domain id>] [-s <size>] [-l "
+           "<count>] "
            "<command> [parameters]\n",
            progname);
     printf("Options:\n");
     printf("\t%-12s%s\n", "-h", "Display this help information");
     printf("\t%-12s%s\n", "-v",
            "Display additional information about the command");
+    printf("\t%-12s%s\n", "-t", "Measure request to response time");
     printf("\t%-12s%s %lu\n", "-l <count>",
            "Loop the command the given number of times. <count> is in the "
            "range 1 to",
@@ -126,15 +144,20 @@ int main(int argc, char* argv[])
     uint64_t dib;
     int index = 0;
     uint8_t cc = 0;
+    bool measureTime = false;
     bool verbose = false;
     bool looped = false;
     uint32_t loops = 1;
+    uint32_t loopCount = 1;
     uint32_t ccCounts[CC_COUNT] = {0};
+    struct timespec begin;
+    double timeSpent = 0.0;
+    double totalTimeSpent = 0.0;
 
     //
     // Parse arguments.
     //
-    while (-1 != (c = getopt(argc, argv, "hvl:a:i:s:d:")))
+    while (-1 != (c = getopt(argc, argv, "hvtl:a:i:s:d:")))
     {
         switch (c)
         {
@@ -145,6 +168,10 @@ int main(int argc, char* argv[])
 
             case 'v':
                 verbose = true;
+                break;
+
+            case 't':
+                measureTime = true;
                 break;
 
             case 'l':
@@ -159,6 +186,8 @@ int main(int argc, char* argv[])
                         perror("");
                     goto ErrorExit;
                 }
+                loopCount =
+                    loops; // Preserve a copy for average time measurement
                 break;
 
             case 'a':
@@ -226,6 +255,17 @@ int main(int argc, char* argv[])
     {
         printf("PECI target[0x%x]: ", address);
     }
+
+    if (measureTime)
+    {
+        if (verbose && (loopCount > 1))
+        {
+            printf("Warning: Request-response time measurement with verbose "
+                   "mode can affect the time between consecutive commands in "
+                   "looped mode!\n");
+        }
+    }
+
     if (strcmp(cmd, "ping") == 0)
     {
         if (verbose)
@@ -234,7 +274,16 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_Ping(address);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             if (verbose || loops == 0)
             {
                 if (0 != ret)
@@ -256,7 +305,16 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_GetDIB(address, &dib);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             if (verbose || loops == 0)
             {
                 if (0 != ret)
@@ -279,7 +337,16 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_GetTemp(address, &temperature);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             if (verbose || loops == 0)
             {
                 if (0 != ret)
@@ -320,9 +387,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret =
                 peci_RdPkgConfig_dom(address, domainId, u8PkgIndex, u16PkgParam,
                                      u8Size, (uint8_t*)&u32PkgValue, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -366,8 +442,17 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrPkgConfig_dom(address, domainId, u8PkgIndex,
                                        u16PkgParam, u32PkgValue, u8Size, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -405,8 +490,17 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdIAMSR_dom(address, domainId, u8MsrThread, u16MsrAddr,
                                    &u64MsrVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -457,9 +551,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdPCIConfig_dom(address, domainId, u8PciBus, u8PciDev,
                                        u8PciFunc, u16PciReg,
                                        (uint8_t*)&u32PciReadVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -510,10 +613,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdPCIConfigLocal_dom(
                 address, domainId, u8PciBus, u8PciDev, u8PciFunc, u16PciReg,
                 u8Size, (uint8_t*)&u32PciReadVal, &cc);
             ccCounts[cc]++;
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
 
             if (verbose || loops == 0)
             {
@@ -565,9 +676,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrPCIConfigLocal_dom(address, domainId, u8PciBus,
                                             u8PciDev, u8PciFunc, u16PciReg,
                                             u8Size, u32PciWriteVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -610,9 +730,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigPciLocal_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
                 u16PciReg, u8Size, (uint8_t*)&u32PciReadVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -662,9 +791,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrEndPointPCIConfigLocal_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
                 u16PciReg, u8Size, u32PciWriteVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -705,9 +843,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigPci_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
                 u16PciReg, u8Size, (uint8_t*)&u32PciReadVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -756,9 +903,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrEndPointPCIConfig_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
                 u16PciReg, u8Size, u32PciWriteVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -803,9 +959,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigMmio_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
                 u8AddrType, u64Offset, u8Size, (uint8_t*)&u32PciReadVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -857,9 +1022,18 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrEndPointConfigMmio_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
                 u8AddrType, u64Offset, u8Size, u64MmioWriteVal, &cc);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             ccCounts[cc]++;
 
             if (verbose || loops == 0)
@@ -929,8 +1103,17 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_raw(rawAddr, readLength, rawCmd, writeLength, rawResp,
                            readLength);
+            timeSpent = getTimeDifference(begin);
+            if (verbose && measureTime)
+            {
+                printf("\nTime taken in iteration %d = %lf s\n",
+                       (loopCount - loops), timeSpent);
+            }
+            totalTimeSpent += timeSpent;
+
             if (verbose)
             {
                 printf("   ");
@@ -968,6 +1151,16 @@ int main(int argc, char* argv[])
     {
         printf("ERROR: Unrecognized command\n");
         goto ErrorExit;
+    }
+
+    if (measureTime)
+    {
+        printf("Total time taken = %lf seconds\n", totalTimeSpent);
+        if (loopCount > 1)
+        {
+            printf("Average time taken per command = %lf seconds\n",
+                   totalTimeSpent / loopCount);
+        }
     }
 
     return 0;
