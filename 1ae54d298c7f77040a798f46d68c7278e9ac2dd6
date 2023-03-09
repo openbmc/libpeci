@@ -1,0 +1,7 @@
+Code-Review+2: Jason Bills <jason.m.bills@linux.intel.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Submitted-by: Sumanth Bhat <sumanth.bhat@linux.intel.com>
+Submitted-at: Thu, 09 Mar 2023 18:06:24 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/libpeci/+/61355
+Project: openbmc/libpeci
+Branch: refs/heads/master
