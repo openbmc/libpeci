@@ -35,6 +35,9 @@ typedef enum
     icx = 0x000606A0,
     icxd = 0x000606C0,
     spr = 0x000806F0,
+    emr = 0x000C06F0,
+    gnr = 0x000A06D0,
+    srf = 0x000A06F0,
 } CPUModel;
 
 // PECI Status Codes
