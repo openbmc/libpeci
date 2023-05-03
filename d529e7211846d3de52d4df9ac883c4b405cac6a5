@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "ee0decab_ffbc7904",
         "filename": "peci.c",
@@ -14,8 +15,8 @@
       "side": 1,
       "message": "Should this now have a length parameter to return the size of the data?",
       "revId": "d529e7211846d3de52d4df9ac883c4b405cac6a5",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
-  ]
+  ],
+  "submitRequirementResults": []
 }
