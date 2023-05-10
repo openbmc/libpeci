@@ -16,8 +16,9 @@
 #include <peci.h>
 
 #include <boost/asio/io_context.hpp>
-#include <iostream>
 #include <sdbusplus/asio/object_server.hpp>
+
+#include <iostream>
 
 int main()
 {

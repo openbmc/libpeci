@@ -388,9 +388,9 @@ int main(int argc, char* argv[])
         while (loops--)
         {
             clock_gettime(CLOCK_REALTIME, &begin);
-            ret =
-                peci_RdPkgConfig_dom(address, domainId, u8PkgIndex, u16PkgParam,
-                                     u8Size, (uint8_t*)&u32PkgValue, &cc);
+            ret = peci_RdPkgConfig_dom(address, domainId, u8PkgIndex,
+                                       u16PkgParam, u8Size,
+                                       (uint8_t*)&u32PkgValue, &cc);
             timeSpent = getTimeDifference(begin);
             if (verbose && measureTime)
             {

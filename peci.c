@@ -377,8 +377,8 @@ EPECIStatus peci_GetTemp(uint8_t target, int16_t* temperature)
 
     cmd.addr = target;
 
-    EPECIStatus ret =
-        HW_peci_issue_cmd(PECI_IOC_GET_TEMP, (char*)&cmd, peci_fd);
+    EPECIStatus ret = HW_peci_issue_cmd(PECI_IOC_GET_TEMP, (char*)&cmd,
+                                        peci_fd);
 
     if (ret == PECI_CC_SUCCESS)
     {
@@ -807,9 +807,9 @@ EPECIStatus peci_RdPCIConfigLocal_dom(uint8_t target, uint8_t domainId,
     {
         return PECI_CC_DRIVER_ERR;
     }
-    ret =
-        peci_RdPCIConfigLocal_seq_dom(target, domainId, u8Bus, u8Device, u8Fcn,
-                                      u16Reg, u8ReadLen, pPCIReg, peci_fd, cc);
+    ret = peci_RdPCIConfigLocal_seq_dom(target, domainId, u8Bus, u8Device,
+                                        u8Fcn, u16Reg, u8ReadLen, pPCIReg,
+                                        peci_fd, cc);
 
     peci_Close(peci_fd);
     return ret;
@@ -1832,9 +1832,9 @@ EPECIStatus peci_GetCPUID(const uint8_t clientAddr, CPUModel* cpuModel,
         return PECI_CC_CPU_NOT_PRESENT;
     }
 
-    ret =
-        peci_RdPkgConfig(clientAddr, PECI_MBX_INDEX_CPU_ID, PECI_PKG_ID_CPU_ID,
-                         sizeof(uint32_t), (uint8_t*)&cpuid, cc);
+    ret = peci_RdPkgConfig(clientAddr, PECI_MBX_INDEX_CPU_ID,
+                           PECI_PKG_ID_CPU_ID, sizeof(uint32_t),
+                           (uint8_t*)&cpuid, cc);
 
     // Separate out the model and stepping (bits 3:0) from the CPUID
     *cpuModel = cpuid & 0xFFFFFFF0;
