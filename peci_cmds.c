@@ -387,6 +387,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdPkgConfig_dom(address, domainId, u8PkgIndex,
                                        u16PkgParam, u8Size,
@@ -442,6 +443,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrPkgConfig_dom(address, domainId, u8PkgIndex,
                                        u16PkgParam, u32PkgValue, u8Size, &cc);
@@ -490,6 +492,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdIAMSR_dom(address, domainId, u8MsrThread, u16MsrAddr,
                                    &u64MsrVal, &cc);
@@ -551,6 +554,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdPCIConfig_dom(address, domainId, u8PciBus, u8PciDev,
                                        u8PciFunc, u16PciReg,
@@ -613,6 +617,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdPCIConfigLocal_dom(
                 address, domainId, u8PciBus, u8PciDev, u8PciFunc, u16PciReg,
@@ -676,6 +681,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrPCIConfigLocal_dom(address, domainId, u8PciBus,
                                             u8PciDev, u8PciFunc, u16PciReg,
@@ -730,6 +736,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigPciLocal_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
@@ -791,6 +798,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrEndPointPCIConfigLocal_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
@@ -843,6 +851,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigPci_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
@@ -903,6 +912,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrEndPointPCIConfig_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc,
@@ -959,6 +969,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigMmio_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
@@ -1022,6 +1033,7 @@ int main(int argc, char* argv[])
         }
         while (loops--)
         {
+            cc = 0; // reset the cc for each loop
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_WrEndPointConfigMmio_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
