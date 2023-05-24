@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "729e3df0_372b6786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-05-24T20:12:50Z",
+      "side": 1,
+      "message": "Minor fix that has been up for almost two weeks, so going with +2.",
+      "revId": "5f1d7f7adeef902d5776d1af528129892a53d1c3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
