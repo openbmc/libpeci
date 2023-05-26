@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
     int c;
     int i = 0;
     char* cmd = NULL;
-    EPECIStatus ret;
+    EPECIStatus ret = PECI_CC_SUCCESS;
     uint8_t address = 0x30; // use default address of 48d
     uint8_t domainId = 0;   // use default domain ID of 0
     uint8_t u8Size = 4;     // default to a DWORD
@@ -1139,7 +1139,7 @@ int main(int argc, char* argv[])
         }
         if (!verbose)
         {
-            if (0 != ret)
+            if (PECI_CC_SUCCESS != ret)
             {
                 printf("ERROR %d: command failed\n", ret);
             }
