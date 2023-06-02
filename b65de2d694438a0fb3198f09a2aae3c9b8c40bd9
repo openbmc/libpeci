@@ -16,6 +16,23 @@
       "message": "please merge. might solve the issue of \nhttps://jenkins.openbmc.org/job/ci-repository/67577/console \nthis patchset failing to build in CI.",
       "revId": "b65de2d694438a0fb3198f09a2aae3c9b8c40bd9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff179052_e705fcb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-06-02T11:09:20Z",
+      "side": 1,
+      "message": "I\u0027m going to force this through since it has been a week and it is blocking Yocto subtree updates.",
+      "revId": "b65de2d694438a0fb3198f09a2aae3c9b8c40bd9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
