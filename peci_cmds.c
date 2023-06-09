@@ -1113,6 +1113,7 @@ int main(int argc, char* argv[])
             free(rawCmd);
             return 1;
         }
+        ret = 0;
         while (loops--)
         {
             clock_gettime(CLOCK_REALTIME, &begin);
