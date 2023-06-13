@@ -16,6 +16,24 @@
       "message": "Is this change still needed after this fix was merged? https://gerrit.openbmc.org/c/openbmc/libpeci/+/63782",
       "revId": "0512e23192ee0290090ddad9c2268bc07369a830",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3b7eea8_594d505d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000520
+      },
+      "writtenOn": "2023-06-13T23:26:43Z",
+      "side": 1,
+      "message": "Nice, I did not see that other change. I think the other change is preferable, please use that instead.",
+      "parentUuid": "7e385cb8_c21afad1",
+      "revId": "0512e23192ee0290090ddad9c2268bc07369a830",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ],
   "submitRequirementResults": []
