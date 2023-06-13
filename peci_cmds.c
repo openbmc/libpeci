@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
     uint8_t domainId = 0;   // use default domain ID of 0
     uint8_t u8Size = 4;     // default to a DWORD
     uint32_t u32PciReadVal = 0;
+    uint64_t u64MmioReadVal = 0;
     uint8_t u8Seg = 0;
     uint8_t u8Bar = 0;
     uint8_t u8AddrType = 0;
@@ -973,7 +974,7 @@ int main(int argc, char* argv[])
             clock_gettime(CLOCK_REALTIME, &begin);
             ret = peci_RdEndPointConfigMmio_dom(
                 address, domainId, u8Seg, u8PciBus, u8PciDev, u8PciFunc, u8Bar,
-                u8AddrType, u64Offset, u8Size, (uint8_t*)&u32PciReadVal, &cc);
+                u8AddrType, u64Offset, u8Size, (uint8_t*)&u64MmioReadVal, &cc);
             timeSpent = getTimeDifference(begin);
             if (verbose && measureTime)
             {
@@ -993,8 +994,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
-                           u32PciReadVal);
+                    printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2,
+                           u64MmioReadVal);
                 }
             }
         }
