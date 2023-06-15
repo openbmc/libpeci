@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af470c6_b3287249",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001023
+      },
+      "writtenOn": "2023-06-15T23:20:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9ce5ac_7b92f574",
+      "revId": "c1e238775dd0d930be220d2fb2ee928f4b0a3065",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e04f0d8_642ef75b",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-06-13T19:51:22Z",
       "side": 1,
       "message": "Is this cast because a uint64_t may be a `long` or a `long long`? If so, you may consider using `PRIu64` from `\u003cinttypes.h\u003e` in the format string instead of the cast.",
+      "range": {
+        "startLine": 998,
+        "startChar": 27,
+        "endLine": 998,
+        "endChar": 47
+      },
+      "revId": "c1e238775dd0d930be220d2fb2ee928f4b0a3065",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bca5cf_088b8cd2",
+        "filename": "peci_cmds.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1001023
+      },
+      "writtenOn": "2023-06-15T23:20:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e04f0d8_642ef75b",
       "range": {
         "startLine": 998,
         "startChar": 27,
