@@ -88,8 +88,11 @@ if(${DBUS_RAW_PECI})
           LIBRARY DESTINATION lib
           ARCHIVE DESTINATION lib/static)
 
+  find_package (PkgConfig REQUIRED)
+  pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)
+
   set(SERVICE_FILES ${PROJECT_SOURCE_DIR}/service_files/com.intel.peci.service)
 
-  install(FILES ${SERVICE_FILES} DESTINATION /lib/systemd/system/)
+  install(FILES ${SERVICE_FILES} DESTINATION "${SYSTEMD_SYSTEM_UNIT_DIR}")
 endif()
 
