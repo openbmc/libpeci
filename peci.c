@@ -45,6 +45,12 @@ void peci_SetDevName(char* peci_dev)
     {
         strncpy(peci_name_new, peci_dev, sizeof(peci_name_new));
         peci_name_new[DEV_NAME_SIZE - 1] = '\0';
+
+        if (peci_device_list[0] == peci_name_new && peci_device_list[1] == NULL)
+        {
+            return;
+        }
+
         peci_device_list[0] = peci_name_new;
         peci_device_list[1] = NULL;
         syslog(LOG_INFO, "PECI set dev name to %s\n", peci_device_list[0]);
