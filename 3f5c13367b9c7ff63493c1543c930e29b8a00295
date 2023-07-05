@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc5c3900_8f40976e",
+        "filename": "peci.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-07-05T20:21:41Z",
+      "side": 1,
+      "message": "I don\u0027t think this is doing what you want. This looks like it\u0027s comparing the pointer value at peci_device_list[0] to the static pointer value of peci_new_name. Won\u0027t that always be true after the first time line 54 is run?\n\nI think you may need to do a string comparison to check peci_new_name.",
+      "range": {
+        "startLine": 49,
+        "startChar": 12,
+        "endLine": 49,
+        "endChar": 48
+      },
+      "revId": "3f5c13367b9c7ff63493c1543c930e29b8a00295",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1119534_bb9523f7",
+        "filename": "peci.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-07-05T20:21:41Z",
+      "side": 1,
+      "message": "If this message is the issue, what about just wrapping this (and any other info messages) in a debug build flag that can be enabled when needed?",
+      "revId": "3f5c13367b9c7ff63493c1543c930e29b8a00295",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
