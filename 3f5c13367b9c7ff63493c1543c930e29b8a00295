@@ -39,6 +39,24 @@
       "message": "If this message is the issue, what about just wrapping this (and any other info messages) in a debug build flag that can be enabled when needed?",
       "revId": "3f5c13367b9c7ff63493c1543c930e29b8a00295",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a1cf2f7_584c8e4e",
+        "filename": "peci.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001746
+      },
+      "writtenOn": "2023-07-07T10:44:02Z",
+      "side": 1,
+      "message": "+1\nChanging code logic to avoid some logs is not a good approach overall. \npeci_device_list is changed after suggested return happens. It is global variable. \nWe can\u0027t be 100% sure that this will not cause any regression.",
+      "parentUuid": "a1119534_bb9523f7",
+      "revId": "3f5c13367b9c7ff63493c1543c930e29b8a00295",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
