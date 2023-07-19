@@ -38,6 +38,7 @@ extern "C"
         spr = 0x000806F0,
         emr = 0x000C06F0,
         gnr = 0x000A06D0,
+        gnrd = 0x000A06E0,
         srf = 0x000A06F0,
     } CPUModel;
 
