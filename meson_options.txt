@@ -1,0 +1,6 @@
+option(
+    'raw-peci',
+    type: 'feature',
+    value: 'enabled',
+    description: 'Build raw-peci application',
+)
