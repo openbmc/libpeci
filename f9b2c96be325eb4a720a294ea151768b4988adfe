@@ -16,6 +16,24 @@
       "message": "Thanks for pushing this!!\n\nI had started looking at it a couple weeks ago but got stuck on how to pass the CPP flags vs. C flags.  Are those all default in the `warning_level\u003d3` setting?",
       "revId": "f9b2c96be325eb4a720a294ea151768b4988adfe",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77fcad28_083cc43e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000153
+      },
+      "writtenOn": "2023-07-27T17:46:17Z",
+      "side": 1,
+      "message": "warning_level\u003d3 gets us most of the flags we set previously.  I can add them back as-is if you want, but I\u0027m not sure it would be helpful.\n\ncpp flags versus c flags are set with the language flag on add_project_arguments.  For example:\n\nadd_project_arguments(\u0027-DBMCWEB_DBUS_DNS_RESOLVER\u0027, language : \u0027cpp\u0027)\n\nAdds it to only cpp targets.",
+      "parentUuid": "b9521f8a_52402aad",
+      "revId": "f9b2c96be325eb4a720a294ea151768b4988adfe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
