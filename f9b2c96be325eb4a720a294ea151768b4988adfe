@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9521f8a_52402aad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-07-27T16:36:48Z",
+      "side": 1,
+      "message": "Thanks for pushing this!!\n\nI had started looking at it a couple weeks ago but got stuck on how to pass the CPP flags vs. C flags.  Are those all default in the `warning_level\u003d3` setting?",
+      "revId": "f9b2c96be325eb4a720a294ea151768b4988adfe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
