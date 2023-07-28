@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35d56d15_b1db4216",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-07-28T22:34:05Z",
+      "side": 1,
+      "message": "Confirmed that PECI works on my system through the library, peci_cmds utility, and Redfish PECI, so going ahead with +2.",
+      "revId": "40a5948c518a0d8de3fccfcb5b568bf85d9a8ecb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
