@@ -70,7 +70,8 @@ int main()
                 }
                 rawResp[i].resize(rawCmd[2]);
                 peci_raw(rawCmd[0], rawCmd[2], &rawCmd[3], rawCmd[1],
-                         rawResp[i].data(), rawResp[i].size());
+                         rawResp[i].data(),
+                         static_cast<uint32_t>(rawResp[i].size()));
             }
             peci_SetDevName(NULL);
             return rawResp;
