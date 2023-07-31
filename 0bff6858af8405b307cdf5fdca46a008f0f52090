@@ -22,6 +22,30 @@
       },
       "revId": "0bff6858af8405b307cdf5fdca46a008f0f52090",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b38d3f93_7b1ab6cd",
+        "filename": "meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-07-31T19:46:26Z",
+      "side": 1,
+      "message": "No worries.  Making smaller changes like this has helped me understand meson better, so I could put up the peci-pcie port. 😊",
+      "parentUuid": "b15ffabb_d3cc0957",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "0bff6858af8405b307cdf5fdca46a008f0f52090",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ],
   "submitRequirementResults": []
