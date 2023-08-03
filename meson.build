@@ -77,6 +77,11 @@ libpeci = library(
 )
 install_headers('peci.h')
 
+libpeci_dep = declare_dependency(
+  link_with: libpeci,
+  include_directories: include_directories('.')
+)
+
 bindir = get_option('prefix') + '/' + get_option('bindir')
 
 executable(
