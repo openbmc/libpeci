@@ -35,8 +35,8 @@ double getTimeDifference(const struct timespec begin)
 {
     double timeDiff = 0.0;
     struct timespec end;
-    long seconds = 0;
-    long nanoseconds = 0;
+    time_t seconds = 0;
+    time_t nanoseconds = 0;
 
     clock_gettime(CLOCK_REALTIME, &end);
     seconds = end.tv_sec - begin.tv_sec;
