@@ -16,6 +16,24 @@
       "message": "I think we should wait a month or two before removing this. Other repos still use libpeci as a cmake subproject and they should be updated before this.",
       "revId": "c5dd25a665343b8d578ad684a427f0249fb38e46",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e4ff5a_8c8ab0b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000153
+      },
+      "writtenOn": "2023-08-07T00:06:23Z",
+      "side": 1,
+      "message": "Which repos?  Those repos aren\u0027t pinned on a specific sha?",
+      "parentUuid": "2690cde5_bb9eb0e3",
+      "revId": "c5dd25a665343b8d578ad684a427f0249fb38e46",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
