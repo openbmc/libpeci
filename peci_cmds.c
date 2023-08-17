@@ -410,6 +410,10 @@ int main(int argc, char* argv[])
                     printf("ERROR %d: command failed\n", ret);
                     printf("   cc:0x%02x\n", cc);
                 }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
+                    printf("   cc:0x%02x\n", cc);
+                }
                 else
                 {
                     printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
@@ -514,6 +518,10 @@ int main(int argc, char* argv[])
                     printf("ERROR %d: command failed\n", ret);
                     printf("   cc:0x%02x\n", cc);
                 }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
+                    printf("   cc:0x%02x\n", cc);
+                }
                 else
                 {
                     printf("   cc:0x%02x 0x%0*llx\n", cc, u8Size * 2,
@@ -577,6 +585,10 @@ int main(int argc, char* argv[])
                     printf("ERROR %d: command failed\n", ret);
                     printf("   cc:0x%02x\n", cc);
                 }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
+                    printf("   cc:0x%02x\n", cc);
+                }
                 else
                 {
                     printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
@@ -637,6 +649,10 @@ int main(int argc, char* argv[])
                 if (0 != ret)
                 {
                     printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
                     printf("   cc:0x%02x\n", cc);
                 }
                 else
@@ -759,6 +775,10 @@ int main(int argc, char* argv[])
                     printf("ERROR %d: command failed\n", ret);
                     printf("   cc:0x%02x\n", cc);
                 }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
+                    printf("   cc:0x%02x\n", cc);
+                }
                 else
                 {
                     printf("   cc:0x%02x 0x%0*x\n", cc, u8Size * 2,
@@ -872,6 +892,10 @@ int main(int argc, char* argv[])
                 if (0 != ret)
                 {
                     printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
                     printf("   cc:0x%02x\n", cc);
                 }
                 else
@@ -990,6 +1014,10 @@ int main(int argc, char* argv[])
                 if (0 != ret)
                 {
                     printf("ERROR %d: command failed\n", ret);
+                    printf("   cc:0x%02x\n", cc);
+                }
+                else if (cc != PECI_DEV_CC_SUCCESS)
+                {
                     printf("   cc:0x%02x\n", cc);
                 }
                 else
