@@ -6,7 +6,7 @@ project(
   default_options: [
     'b_ndebug=if-release',
     'cpp_rtti=false',
-    'cpp_std=c++20',
+    'cpp_std=c++23',
     'warning_level=3',
     'werror=true',
   ]
