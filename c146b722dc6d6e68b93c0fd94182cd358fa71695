@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec8c0016_078d82d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-09-21T13:59:37Z",
+      "side": 1,
+      "message": "typo: though",
+      "range": {
+        "startLine": 15,
+        "startChar": 50,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "c146b722dc6d6e68b93c0fd94182cd358fa71695",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "298f9603_26f30760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-09-21T13:59:37Z",
+      "side": 1,
+      "message": "So, will this now fail to build with `raw-peci\u003denabled`?",
+      "revId": "c146b722dc6d6e68b93c0fd94182cd358fa71695",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
