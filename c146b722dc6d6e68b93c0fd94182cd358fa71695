@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "30b35b75_46846536",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2023-09-22T01:39:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec8c0016_078d82d3",
+      "range": {
+        "startLine": 15,
+        "startChar": 50,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "c146b722dc6d6e68b93c0fd94182cd358fa71695",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "298f9603_26f30760",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2023-09-21T13:59:37Z",
       "side": 1,
       "message": "So, will this now fail to build with `raw-peci\u003denabled`?",
+      "revId": "c146b722dc6d6e68b93c0fd94182cd358fa71695",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5625af0a_f187cf7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2023-09-22T01:39:50Z",
+      "side": 1,
+      "message": "Only if you force the use of the subprojects. My interest was in getting libpeci to build as a subproject of dbus-sensors, and we don\u0027t need `raw-peci` for that as the applications just link against `libpeci.so`. I think this is adequate for now. If someone cares about getting libpeci to build `raw-peci` with subprojects then they can figure out how to remove the extra flags at that point?",
+      "parentUuid": "298f9603_26f30760",
       "revId": "c146b722dc6d6e68b93c0fd94182cd358fa71695",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
