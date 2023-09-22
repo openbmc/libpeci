@@ -16,6 +16,23 @@
       "message": "I guess in the end the patch is not necessary for my use-case, I can just add `-Dlibpeci:raw-peci\u003ddisabled` to `meson setup ...` for dbus-sensors. But it did highlight some concerns in sdbusplus and boost.",
       "revId": "ab3f55035d8dbe394055c5720edd1398e47d500c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b705feaf_8978798e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2023-09-22T15:55:58Z",
+      "side": 1,
+      "message": "Looks good to me.  I\u0027ll leave it at +1 for a bit in case others have feedback.",
+      "revId": "ab3f55035d8dbe394055c5720edd1398e47d500c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
