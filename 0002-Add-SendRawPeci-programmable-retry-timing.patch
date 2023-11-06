@@ -1,0 +1,139 @@
+From 4be1302395cb59cbcbeffbddff6027878bb6da99 Mon Sep 17 00:00:00 2001
+From: "Jason M. Bills" <jason.m.bills@linux.intel.com>
+Date: Mon, 15 Nov 2021 11:10:46 -0800
+Subject: [PATCH 2/2] Add SendRawPeci programmable retry timing
+
+Take another parameter in the SendRawPeci D-Bus method which is an array
+of 3 ints: [retryIntervalMin, retryIntervalMax, retryTimeout]. These
+values are used to modify the peci_core kernel module behavior, just for
+the duration of these PECI commands. If any values in the array are -1,
+that module parameter is left unchanged.
+
+Change-Id: I3800701662df5c2f10f8cee1b45343e8768cfdc5
+Signed-off-by: Jonathan Doman <jonathan.doman@intel.com>
+Upstream-Status: Pending
+
+%% original patch: 0001-Add-SendRawPeci-programmable-retry-timing.patch
+---
+ dbus_raw_peci.cpp | 89 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 88 insertions(+), 1 deletion(-)
+
+diff --git a/dbus_raw_peci.cpp b/dbus_raw_peci.cpp
+index 1016a45e9..fd21d5858 100644
+--- a/dbus_raw_peci.cpp
++++ b/dbus_raw_peci.cpp
+@@ -18,8 +18,93 @@
+ #include <boost/asio/io_context.hpp>
+ #include <sdbusplus/asio/object_server.hpp>
+ 
++#include <fstream>
+ #include <iostream>
+ 
++/**
++ * Class to temporarily modify the PECI module timing parameters. Old parameters
++ * are restored when the instance is destroyed.
++ */
++class PeciTimingManager
++{
++    static constexpr const char* intervalMinPath =
++        "/sys/module/peci_core/parameters/retry_interval_min_us";
++    static constexpr const char* intervalMaxPath =
++        "/sys/module/peci_core/parameters/retry_interval_max_us";
++    static constexpr const char* timeoutPath =
++        "/sys/module/peci_core/parameters/total_retry_timeout_us";
++
++    // All in microseconds
++    int32_t prevIntervalMin = -1;
++    int32_t prevIntervalMax = -1;
++    int32_t prevTimeout = -1;
++
++    static int32_t readParam(const char* filename)
++    {
++        std::ifstream paramFile(filename);
++        if (paramFile.is_open())
++        {
++            std::string strVal;
++            if (std::getline(paramFile, strVal))
++            {
++                return std::stoi(strVal);
++            }
++        }
++        return -1;
++    }
++
++    static void writeParam(const char* filename, int32_t val)
++    {
++        if (val == -1)
++        {
++            return;
++        }
++        else if (val < -1)
++        {
++            throw std::invalid_argument("Invalid timing value");
++        }
++        std::ofstream paramFile(filename);
++        if (paramFile.is_open())
++        {
++            paramFile << std::to_string(val);
++        }
++    }
++
++    static void setParams(int32_t newIntervalMin, int32_t newIntervalMax,
++                          int32_t newTimeout)
++    {
++        writeParam(intervalMinPath, newIntervalMin);
++        writeParam(intervalMaxPath, newIntervalMax);
++        writeParam(timeoutPath, newTimeout);
++    }
++
++  public:
++    PeciTimingManager(const std::vector<int32_t>& newTiming)
++    {
++        if (newTiming.size() != 3)
++        {
++            throw std::invalid_argument("Invalid timing array");
++        }
++        prevIntervalMin = readParam(intervalMinPath);
++        prevIntervalMax = readParam(intervalMaxPath);
++        prevTimeout = readParam(timeoutPath);
++
++        setParams(newTiming[0], newTiming[1], newTiming[2]);
++    }
++
++    ~PeciTimingManager()
++    {
++        try
++        {
++            setParams(prevIntervalMin, prevIntervalMax, prevTimeout);
++        }
++        catch (std::invalid_argument& e)
++        {
++            std::cerr << "Failed to restore PECI timing parameters\n";
++        }
++    }
++};
++
+ int main()
+ {
+     boost::asio::io_context io;
+@@ -39,7 +124,8 @@ int main()
+     // Send a Raw PECI command
+     ifaceRawPeci->register_method(
+         "Send", [](const std::string& peciDev,
+-                   const std::vector<std::vector<uint8_t>>& rawCmds) {
++                   const std::vector<std::vector<uint8_t>>& rawCmds,
++                   const std::vector<int32_t>& timingParams) {
+             peci_SetDevName(const_cast<char*>(peciDev.c_str()));
+             // D-Bus will time out after too long, so set a deadline for when to
+             // abort the PECI commands (at 25s, it mostly times out, at 24s it
+@@ -48,6 +134,7 @@ int main()
+             std::chrono::steady_clock::time_point peciDeadline =
+                 std::chrono::steady_clock::now() +
+                 std::chrono::duration<int>(peciTimeout);
++            PeciTimingManager tempTiming(timingParams);
+             std::vector<std::vector<uint8_t>> rawResp;
+             rawResp.resize(rawCmds.size());
+             for (size_t i = 0; i < rawCmds.size(); i++)
+-- 
+2.25.1
+
