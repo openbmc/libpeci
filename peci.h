@@ -430,6 +430,11 @@ EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
                      const uint32_t cmdSize, uint8_t* pRawResp,
                      uint32_t respSize);
 
+// Provides sequential raw PECI command access
+EPECIStatus peci_raw_seq(uint8_t target, uint8_t u8ReadLen,
+                         const uint8_t* pRawCmd, const uint32_t cmdSize,
+                         uint8_t* pRawResp, uint32_t respSize, int peci_fd);
+
 EPECIStatus peci_Lock(int* peci_fd, int timeout_ms);
 void peci_Unlock(int peci_fd);
 EPECIStatus peci_Ping(uint8_t target);
