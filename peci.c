@@ -1757,11 +1757,6 @@ EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
                      uint32_t respSize)
 {
     int peci_fd = -1;
-    struct peci_xfer_msg cmd = {0};
-    uint8_t u8TxBuf[PECI_BUFFER_SIZE] = {0};
-    uint8_t u8RxBuf[PECI_BUFFER_SIZE] = {0};
-    EPECIStatus ret = PECI_CC_SUCCESS;
-
     if (u8ReadLen && pRawResp == NULL)
     {
         return PECI_CC_INVALID_REQ;
@@ -1778,12 +1773,40 @@ EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
         return PECI_CC_DRIVER_ERR;
     }
 
+    EPECIStatus ret = peci_raw_seq(target, u8ReadLen, pRawCmd, cmdSize,
+                                   pRawResp, respSize, peci_fd);
+    peci_Close(peci_fd);
+    return ret;
+}
+
+/*-------------------------------------------------------------------------
+ *  This function provides sequential raw PECI command access
+ *------------------------------------------------------------------------*/
+EPECIStatus peci_raw_seq(uint8_t target, uint8_t u8ReadLen,
+                         const uint8_t* pRawCmd, const uint32_t cmdSize,
+                         uint8_t* pRawResp, uint32_t respSize, int peci_fd)
+{
+    struct peci_xfer_msg cmd = {0};
+    uint8_t u8TxBuf[PECI_BUFFER_SIZE] = {0};
+    uint8_t u8RxBuf[PECI_BUFFER_SIZE] = {0};
+    EPECIStatus ret = PECI_CC_SUCCESS;
+
+    if (u8ReadLen && pRawResp == NULL)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
+    // The target address must be in the valid range
+    if (target < MIN_CLIENT_ADDR || target > MAX_CLIENT_ADDR)
+    {
+        return PECI_CC_INVALID_REQ;
+    }
+
     // Check for valid buffer sizes
     if (cmdSize > PECI_BUFFER_SIZE || respSize < u8ReadLen ||
         u8ReadLen >
             (PECI_BUFFER_SIZE - 1)) // response buffer is data + 1 status byte
     {
-        peci_Close(peci_fd);
         return PECI_CC_INVALID_REQ;
     }
 
@@ -1802,7 +1825,6 @@ EPECIStatus peci_raw(uint8_t target, uint8_t u8ReadLen, const uint8_t* pRawCmd,
         memcpy(pRawResp, u8RxBuf, u8ReadLen);
     }
 
-    peci_Close(peci_fd);
     return ret;
 }
 
