@@ -12,7 +12,7 @@ project(
   ]
 )
 
-if (get_option('raw-peci').enabled())
+if (get_option('raw-peci').allowed())
   sdbusplus = dependency('sdbusplus')
 
   systemd = dependency('systemd', required: true)
@@ -92,7 +92,7 @@ executable(
   install_dir: bindir
 )
 
-if (get_option('raw-peci').enabled())
+if (get_option('raw-peci').allowed())
   executable(
     'raw-peci',
     'dbus_raw_peci.cpp',
