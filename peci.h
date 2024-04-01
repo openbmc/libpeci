@@ -32,13 +32,21 @@ extern "C"
 
 typedef enum
 {
+    skylake = 0x00050650,
     skx = 0x00050650,
+    iceLake = 0x000606A0,
     icx = 0x000606A0,
+    iceLakeD = 0x000606C0,
     icxd = 0x000606C0,
+    sapphireRapids = 0x000806F0,
     spr = 0x000806F0,
+    emeraldRapids = 0x000C06F0,
     emr = 0x000C06F0,
+    graniteRapids = 0x000A06D0,
     gnr = 0x000A06D0,
+    graniteRapidsD = 0x000A06E0,
     gnrd = 0x000A06E0,
+    sierraForest = 0x000A06F0,
     srf = 0x000A06F0,
 } CPUModel;
 
