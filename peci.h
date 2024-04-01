@@ -32,14 +32,14 @@ extern "C"
 
 typedef enum
 {
-    skx = 0x00050650,
-    icx = 0x000606A0,
-    icxd = 0x000606C0,
-    spr = 0x000806F0,
-    emr = 0x000C06F0,
-    gnr = 0x000A06D0,
-    gnrd = 0x000A06E0,
-    srf = 0x000A06F0,
+    skylake = 0x00050650,
+    iceLake = 0x000606A0,
+    iceLakeD = 0x000606C0,
+    sapphireRapids = 0x000806F0,
+    emeraldRapids = 0x000C06F0,
+    graniteRapids = 0x000A06D0,
+    graniteRapidsD = 0x000A06E0,
+    sierraForest = 0x000A06F0,
 } CPUModel;
 
 // PECI Status Codes
