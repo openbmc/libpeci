@@ -22,6 +22,30 @@
       },
       "revId": "7c7bcb0ea85335ba3e67d32e28b1ba114f059660",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15bc38c_3a8435e7",
+        "filename": "peci.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000276
+      },
+      "writtenOn": "2024-04-08T13:42:59Z",
+      "side": 1,
+      "message": "From what I could find, Skylake is one word where Ice Lake is two, so I left it lower-case.",
+      "parentUuid": "b5986f41_3340ece5",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 8
+      },
+      "revId": "7c7bcb0ea85335ba3e67d32e28b1ba114f059660",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
