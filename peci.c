@@ -33,7 +33,7 @@ EPECIStatus peci_GetDIB_seq(uint8_t target, uint64_t* dib, int peci_fd);
 char* peci_device_list[2];
 #define DEV_NAME_SIZE 64
 /*-------------------------------------------------------------------------
- * This funcion sets the name of the PECI device file to use.
+ * This function sets the name of the PECI device file to use.
  * If the PECI device name is null try "/dev/peci-default",
  * if "/dev/peci-default" does not exist, fall back to "/dev/peci-0"
  *------------------------------------------------------------------------*/

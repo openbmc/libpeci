@@ -72,7 +72,7 @@ typedef enum
 #define PECI_TIMEOUT_RESOLUTION_MS 10 // 10 ms
 #define PECI_TIMEOUT_MS 100           // 100 ms
 
-// VCU Index and Sequence Paramaters
+// VCU Index and Sequence Parameters
 #define VCU_SET_PARAM 0x0001
 #define VCU_READ 0x0002
 #define VCU_OPEN_SEQ 0x0003
