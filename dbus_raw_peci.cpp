@@ -40,42 +40,42 @@ int main()
     ifaceRawPeci->register_method(
         "Send", [](const std::string& peciDev,
                    const std::vector<std::vector<uint8_t>>& rawCmds) {
-        peci_SetDevName(const_cast<char*>(peciDev.c_str()));
-        // D-Bus will time out after too long, so set a deadline for when to
-        // abort the PECI commands (at 25s, it mostly times out, at 24s it
-        // doesn't, so use 23s to be safe)
-        constexpr int peciTimeout = 23;
-        std::chrono::steady_clock::time_point peciDeadline =
-            std::chrono::steady_clock::now() +
-            std::chrono::duration<int>(peciTimeout);
-        std::vector<std::vector<uint8_t>> rawResp;
-        rawResp.resize(rawCmds.size());
-        for (size_t i = 0; i < rawCmds.size(); i++)
-        {
-            const std::vector<uint8_t>& rawCmd = rawCmds[i];
-            // If the commands are taking too long, return early to avoid a
-            // D-Bus timeout
-            if (std::chrono::steady_clock::now() > peciDeadline)
+            peci_SetDevName(const_cast<char*>(peciDev.c_str()));
+            // D-Bus will time out after too long, so set a deadline for when to
+            // abort the PECI commands (at 25s, it mostly times out, at 24s it
+            // doesn't, so use 23s to be safe)
+            constexpr int peciTimeout = 23;
+            std::chrono::steady_clock::time_point peciDeadline =
+                std::chrono::steady_clock::now() +
+                std::chrono::duration<int>(peciTimeout);
+            std::vector<std::vector<uint8_t>> rawResp;
+            rawResp.resize(rawCmds.size());
+            for (size_t i = 0; i < rawCmds.size(); i++)
             {
-                std::cerr << peciTimeout
-                          << " second deadline reached.  Aborting PECI "
-                             "commands to avoid a timeout\n";
-                break;
-            }
+                const std::vector<uint8_t>& rawCmd = rawCmds[i];
+                // If the commands are taking too long, return early to avoid a
+                // D-Bus timeout
+                if (std::chrono::steady_clock::now() > peciDeadline)
+                {
+                    std::cerr << peciTimeout
+                              << " second deadline reached.  Aborting PECI "
+                                 "commands to avoid a timeout\n";
+                    break;
+                }
 
-            if (rawCmd.size() < 3)
-            {
-                peci_SetDevName(NULL);
-                throw std::invalid_argument("Command Length too short");
+                if (rawCmd.size() < 3)
+                {
+                    peci_SetDevName(NULL);
+                    throw std::invalid_argument("Command Length too short");
+                }
+                rawResp[i].resize(rawCmd[2]);
+                peci_raw(rawCmd[0], rawCmd[2], &rawCmd[3], rawCmd[1],
+                         rawResp[i].data(),
+                         static_cast<uint32_t>(rawResp[i].size()));
             }
-            rawResp[i].resize(rawCmd[2]);
-            peci_raw(rawCmd[0], rawCmd[2], &rawCmd[3], rawCmd[1],
-                     rawResp[i].data(),
-                     static_cast<uint32_t>(rawResp[i].size()));
-        }
-        peci_SetDevName(NULL);
-        return rawResp;
-    });
+            peci_SetDevName(NULL);
+            return rawResp;
+        });
     ifaceRawPeci->initialize();
 
     io.run();
