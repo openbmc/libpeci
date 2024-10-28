@@ -1,0 +1,9 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+2: Jason Bills <jason.m.bills@linux.intel.com>
+Code-Review+1: Zhikui Ren <zhikui.ren@intel.com>
+Submitted-by: Jason Bills <jason.m.bills@linux.intel.com>
+Submitted-at: Mon, 28 Oct 2024 13:13:14 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/libpeci/+/70792
+Comments-Total: 1
+Project: openbmc/libpeci
+Branch: refs/heads/master
