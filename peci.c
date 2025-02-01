@@ -774,10 +774,10 @@ EPECIStatus peci_RdPCIConfigLocal(
  * This function provides read access to the local PCI configuration space in
  * the specified domain
  *------------------------------------------------------------------------*/
-EPECIStatus
-    peci_RdPCIConfigLocal_dom(uint8_t target, uint8_t domainId, uint8_t u8Bus,
-                              uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                              uint8_t u8ReadLen, uint8_t* pPCIReg, uint8_t* cc)
+EPECIStatus peci_RdPCIConfigLocal_dom(
+    uint8_t target, uint8_t domainId, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen, uint8_t* pPCIReg,
+    uint8_t* cc)
 {
     int peci_fd = -1;
     EPECIStatus ret = PECI_CC_SUCCESS;
@@ -809,10 +809,10 @@ EPECIStatus
  * This function allows sequential RdPCIConfigLocal with the provided
  * peci file descriptor.
  *------------------------------------------------------------------------*/
-EPECIStatus
-    peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
-                              uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen,
-                              uint8_t* pPCIReg, int peci_fd, uint8_t* cc)
+EPECIStatus peci_RdPCIConfigLocal_seq(
+    uint8_t target, uint8_t u8Bus, uint8_t u8Device, uint8_t u8Fcn,
+    uint16_t u16Reg, uint8_t u8ReadLen, uint8_t* pPCIReg, int peci_fd,
+    uint8_t* cc)
 {
     //  Default to domain ID 0
     return peci_RdPCIConfigLocal_seq_dom(
@@ -890,10 +890,10 @@ EPECIStatus peci_WrPCIConfigLocal(
  * This function provides write access to the local PCI configuration space in
  * the specified domain
  *------------------------------------------------------------------------*/
-EPECIStatus
-    peci_WrPCIConfigLocal_dom(uint8_t target, uint8_t domainId, uint8_t u8Bus,
-                              uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                              uint8_t DataLen, uint32_t DataVal, uint8_t* cc)
+EPECIStatus peci_WrPCIConfigLocal_dom(
+    uint8_t target, uint8_t domainId, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t DataLen, uint32_t DataVal,
+    uint8_t* cc)
 {
     int peci_fd = -1;
     struct peci_wr_pci_cfg_local_msg cmd = {0};
@@ -996,10 +996,10 @@ static EPECIStatus peci_RdEndPointConfigPciCommon_dom(
  * This function provides read access to the PCI configuration space at
  * the requested PCI configuration address.
  *------------------------------------------------------------------------*/
-EPECIStatus
-    peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
-                             uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                             uint8_t u8ReadLen, uint8_t* pPCIData, uint8_t* cc)
+EPECIStatus peci_RdEndPointConfigPci(
+    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen, uint8_t* pPCIData,
+    uint8_t* cc)
 {
     //  Default to domain ID 0
     return peci_RdEndPointConfigPci_dom(target, 0, u8Seg, u8Bus, u8Device,
@@ -1409,10 +1409,10 @@ EPECIStatus peci_WrEndPointPCIConfigLocal_dom(
 /*-------------------------------------------------------------------------
  * This function provides write access to the EP local PCI configuration space
  *------------------------------------------------------------------------*/
-EPECIStatus
-    peci_WrEndPointPCIConfig(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
-                             uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                             uint8_t DataLen, uint32_t DataVal, uint8_t* cc)
+EPECIStatus peci_WrEndPointPCIConfig(
+    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t DataLen, uint32_t DataVal,
+    uint8_t* cc)
 {
     //  Default to domain ID 0
     return peci_WrEndPointPCIConfig_dom(target, 0, u8Seg, u8Bus, u8Device,

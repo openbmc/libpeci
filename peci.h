@@ -177,10 +177,10 @@ EPECIStatus peci_RdPCIConfig_seq(
 
 // Allows sequential RdPCIConfig with the provided peci file descriptor in
 // the specified domain
-EPECIStatus
-    peci_RdPCIConfig_seq_dom(uint8_t target, uint8_t domainId, uint8_t u8Bus,
-                             uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                             uint8_t* pPCIData, int peci_fd, uint8_t* cc);
+EPECIStatus peci_RdPCIConfig_seq_dom(
+    uint8_t target, uint8_t domainId, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t* pPCIData, int peci_fd,
+    uint8_t* cc);
 
 // Provides read access to the local PCI Configuration space
 EPECIStatus peci_RdPCIConfigLocal(
@@ -189,16 +189,16 @@ EPECIStatus peci_RdPCIConfigLocal(
 
 // Provides read access to the local PCI Configuration space in the
 // specified domain
-EPECIStatus
-    peci_RdPCIConfigLocal_dom(uint8_t target, uint8_t domainId, uint8_t u8Bus,
-                              uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                              uint8_t u8ReadLen, uint8_t* pPCIReg, uint8_t* cc);
+EPECIStatus peci_RdPCIConfigLocal_dom(
+    uint8_t target, uint8_t domainId, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen, uint8_t* pPCIReg,
+    uint8_t* cc);
 
 // Allows sequential RdPCIConfigLocal with the provided peci file descriptor
-EPECIStatus
-    peci_RdPCIConfigLocal_seq(uint8_t target, uint8_t u8Bus, uint8_t u8Device,
-                              uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen,
-                              uint8_t* pPCIReg, int peci_fd, uint8_t* cc);
+EPECIStatus peci_RdPCIConfigLocal_seq(
+    uint8_t target, uint8_t u8Bus, uint8_t u8Device, uint8_t u8Fcn,
+    uint16_t u16Reg, uint8_t u8ReadLen, uint8_t* pPCIReg, int peci_fd,
+    uint8_t* cc);
 
 // Allows sequential RdPCIConfigLocal with the provided peci file descriptor
 // in the specified domain
@@ -214,16 +214,16 @@ EPECIStatus peci_WrPCIConfigLocal(
 
 // Provides write access to the local PCI Configuration space in the
 // specified domain
-EPECIStatus
-    peci_WrPCIConfigLocal_dom(uint8_t target, uint8_t domainId, uint8_t u8Bus,
-                              uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                              uint8_t DataLen, uint32_t DataVal, uint8_t* cc);
+EPECIStatus peci_WrPCIConfigLocal_dom(
+    uint8_t target, uint8_t domainId, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t DataLen, uint32_t DataVal,
+    uint8_t* cc);
 
 // Provides read access to PCI configuration space
-EPECIStatus
-    peci_RdEndPointConfigPci(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
-                             uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                             uint8_t u8ReadLen, uint8_t* pPCIData, uint8_t* cc);
+EPECIStatus peci_RdEndPointConfigPci(
+    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t u8ReadLen, uint8_t* pPCIData,
+    uint8_t* cc);
 
 // Provides read access to PCI configuration space in the specified domain
 EPECIStatus peci_RdEndPointConfigPci_dom(
@@ -310,10 +310,10 @@ EPECIStatus peci_WrEndPointPCIConfigLocal_dom(
     uint32_t DataVal, uint8_t* cc);
 
 // Provides write access to the EP PCI Configuration space
-EPECIStatus
-    peci_WrEndPointPCIConfig(uint8_t target, uint8_t u8Seg, uint8_t u8Bus,
-                             uint8_t u8Device, uint8_t u8Fcn, uint16_t u16Reg,
-                             uint8_t DataLen, uint32_t DataVal, uint8_t* cc);
+EPECIStatus peci_WrEndPointPCIConfig(
+    uint8_t target, uint8_t u8Seg, uint8_t u8Bus, uint8_t u8Device,
+    uint8_t u8Fcn, uint16_t u16Reg, uint8_t DataLen, uint32_t DataVal,
+    uint8_t* cc);
 
 // Provides write access to the EP PCI Configuration space in the specified
 // domain
