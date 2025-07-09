@@ -18,7 +18,7 @@ if (get_option('raw-peci').allowed())
 
     systemd = dependency('systemd', required: true)
     systemd_system_unit_dir = systemd.get_variable(
-        pkgconfig: 'systemdsystemunitdir',
+        pkgconfig: 'systemd_system_unit_dir',
     )
 
     boost = dependency('boost', version: '>=1.82')
