@@ -62,8 +62,8 @@ void peci_SetDevName(char* peci_dev)
  * This function initializes PECI device name when a shared library
  * is loaded, typically during program startup.
  *------------------------------------------------------------------------*/
-static void init() __attribute__((constructor));
-static void init()
+static void init(void) __attribute__((constructor));
+static void init(void)
 {
     // By default PECI_DEV is not defined in the environment,
     // so this will call peci_SetDevName(NULL) and initialize
