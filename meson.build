@@ -34,41 +34,46 @@ if (get_option('raw-peci').allowed())
     )
 endif
 
-add_project_arguments(
-    [
-        '-Wcast-align',
-        '-Wconversion',
-        '-Wdouble-promotion',
-        '-Wduplicated-branches',
-        '-Wduplicated-cond',
-        '-Wformat=2',
-        '-Wlogical-op',
-        '-Wsign-conversion',
-        '-Wunused',
-        '-Wno-unused-parameter',
-        '-Wno-psabi',
-    ],
-    language: 'c',
-)
+c = meson.get_compiler('c')
+cxx = meson.get_compiler('cpp')
 
-add_project_arguments(
-    [
-        '-Wcast-align',
-        '-Wconversion',
-        '-Wdouble-promotion',
-        '-Wduplicated-branches',
-        '-Wduplicated-cond',
-        '-Wformat=2',
-        '-Wlogical-op',
-        '-Wnull-dereference',
-        '-Wsign-conversion',
-        '-Wunused',
-        '-Wno-psabi',
-        '-Wno-unused-parameter',
-        '-fno-rtti',
-    ],
-    language: 'cpp',
-)
+common_c_warn = [
+    '-Wcast-align',
+    '-Wconversion',
+    '-Wdouble-promotion',
+    '-Wformat=2',
+    '-Wsign-conversion',
+    '-Wunused',
+    '-Wno-unused-parameter',
+    '-Wno-psabi',
+]
+
+common_cpp_warn = [
+    '-Wcast-align',
+    '-Wconversion',
+    '-Wdouble-promotion',
+    '-Wformat=2',
+    '-Wnull-dereference',
+    '-Wsign-conversion',
+    '-Wunused',
+    '-Wno-psabi',
+    '-Wno-unused-parameter',
+    '-fno-rtti',
+]
+
+gcc_only = ['-Wduplicated-branches', '-Wduplicated-cond', '-Wlogical-op']
+
+if c.get_id() == 'gcc'
+    add_project_arguments(common_c_warn + gcc_only, language: 'c')
+else
+    add_project_arguments(common_c_warn, language: 'c')
+endif
+
+if cxx.get_id() == 'gcc'
+    add_project_arguments(common_cpp_warn + gcc_only, language: 'cpp')
+else
+    add_project_arguments(common_cpp_warn, language: 'cpp')
+endif
 
 libpeci = library(
     'peci',
